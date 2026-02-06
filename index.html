@@ -233,7 +233,6 @@
             table-layout: fixed;
         }
 
-        /* Header rows styling */
         .results-table .info-header-row th {
             border-bottom: 1px solid #555;
         }
@@ -278,7 +277,6 @@
             background: rgba(212, 175, 55, 0.4);
         }
 
-        /* Paired row colors - alternating color pairs */
         .results-table tbody tr.info-row {
             background: #2a2a2a;
         }
@@ -355,7 +353,6 @@
             color: #555;
         }
 
-        /* FIXED: Price cell styling - horizontal display */
         .price-cell {
             font-family: 'Courier New', monospace;
             cursor: pointer;
@@ -364,7 +361,7 @@
             font-size: 1.3em !important;
             letter-spacing: 1px;
             text-align: center !important;
-            white-space: nowrap !important; /* Changed back to nowrap */
+            white-space: nowrap !important;
             overflow: visible !important;
             text-overflow: clip !important;
             text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
@@ -379,7 +376,6 @@
             font-size: 1.1em;
         }
 
-        /* Action Buttons */
         .action-buttons {
             display: flex;
             gap: 10px;
@@ -416,7 +412,6 @@
             transform: translateY(0);
         }
 
-        /* History Section */
         .history-section {
             margin-top: 20px;
             background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
@@ -475,7 +470,127 @@
             background: rgba(212, 175, 55, 0.4);
         }
 
-        /* Mobile optimizations */
+        .whatsapp-btn {
+            background: linear-gradient(135deg, rgba(37, 211, 102, 0.3), rgba(37, 211, 102, 0.2));
+            border: 3px solid #25D366;
+        }
+
+        .whatsapp-btn:hover {
+            background: linear-gradient(135deg, rgba(37, 211, 102, 0.4), rgba(37, 211, 102, 0.3));
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
+            margin: 10% auto;
+            padding: 25px;
+            border: 3px solid #d4af37;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.5);
+        }
+
+        .modal-header {
+            color: #d4af37;
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .close {
+            color: #d4af37;
+            float: right;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 20px;
+            transition: all 0.3s;
+        }
+
+        .close:hover {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+        }
+
+        .checkbox-group {
+            margin: 15px 0;
+        }
+
+        .checkbox-item {
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .checkbox-item:hover {
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.2);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #d4af37;
+        }
+
+        .checkbox-item label {
+            color: #d4af37;
+            font-weight: 600;
+            font-size: 1.05em;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .format-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .format-btn {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.2));
+            border: 2px solid #d4af37;
+            color: #d4af37;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 700;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .format-btn:hover {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.4), rgba(212, 175, 55, 0.3));
+            transform: translateY(-2px);
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 12px;
@@ -496,16 +611,15 @@
                 font-size: 0.95em;
             }
 
-            /* FIXED: Horizontal price display on mobile */
             .price-cell {
                 padding: 10px 4px !important;
                 font-size: 1.1em !important;
                 font-weight: 900 !important;
-                white-space: nowrap !important; /* Keep horizontal */
+                white-space: nowrap !important;
                 overflow: hidden !important;
-                text-overflow: ellipsis !important; /* Show ellipsis for long numbers */
+                text-overflow: ellipsis !important;
                 line-height: 1.2 !important;
-                min-width: 0; /* Allow shrinking */
+                min-width: 0;
             }
 
             .editable-field {
@@ -532,6 +646,12 @@
                 height: 32px;
                 font-size: 1em;
             }
+
+            .modal-content {
+                margin: 20% auto;
+                width: 95%;
+                padding: 20px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -551,16 +671,6 @@
             .price-cell {
                 font-size: 1em !important;
             }
-        }
-
-        /* WhatsApp button styling */
-        .whatsapp-btn {
-            background: linear-gradient(135deg, rgba(37, 211, 102, 0.3), rgba(37, 211, 102, 0.2));
-            border: 3px solid #25D366;
-        }
-
-        .whatsapp-btn:hover {
-            background: linear-gradient(135deg, rgba(37, 211, 102, 0.4), rgba(37, 211, 102, 0.3));
         }
     </style>
 </head>
@@ -586,6 +696,24 @@
                 placeholder="Enter values (e.g., 1150 2000 3500)"
             >
             <div class="clear-input-btn" id="clearInputBtn" title="Clear all input">✕</div>
+        </div>
+
+        <!-- Purchase Price Rules Section -->
+        <div class="collapsible-section" id="purchaseSection">
+            <div class="collapsible-header">
+                <h3>💰 Purchase Price Rules</h3>
+                <span class="collapsible-arrow">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <div class="rule-items-compact">
+                    <select id="purchaseOpType">
+                        <option value="multiply">Multiply</option>
+                        <option value="percentage">Add %</option>
+                        <option value="absolute">Add Amount</option>
+                    </select>
+                    <input type="number" id="purchaseValue" value="0" step="0.01" placeholder="Value">
+                </div>
+            </div>
         </div>
 
         <div class="collapsible-section" id="saleSection">
@@ -630,15 +758,12 @@
             </div>
         </div>
 
-        <!-- History Section -->
         <div class="history-section" id="historySection">
             <h3>
                 <span>📜 History</span>
                 <button class="clear-history-btn" id="clearHistoryBtn">Clear All</button>
             </h3>
-            <div class="history-list" id="historyList">
-                <!-- History items will be added here -->
-            </div>
+            <div class="history-list" id="historyList"></div>
         </div>
 
         <div class="results-section">
@@ -671,23 +796,71 @@
                     📜 HISTORY
                 </button>
 
-                <button class="main-action-btn" id="copyBtn" onclick="copyData()">
+                <button class="main-action-btn" id="copyBtn">
                     📋 COPY
                 </button>
 
-                <button class="main-action-btn whatsapp-btn" id="whatsappBtn" onclick="shareToWhatsApp()">
+                <button class="main-action-btn whatsapp-btn" id="whatsappBtn">
                     💬 WHATSAPP
                 </button>
 
-                <button class="main-action-btn" id="exportBtn" onclick="exportToExcel()">
-                    📤 EXCEL
+                <button class="main-action-btn" id="exportBtn">
+                    📤 EXPORT
                 </button>
             </div>
         </div>
     </div>
 
+    <!-- Export Modal -->
+    <div id="exportModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-header">📤 Export Options</div>
+            
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="exportName" checked>
+                    <label for="exportName">Item Name</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="exportGroup" checked>
+                    <label for="exportGroup">Item Group</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="exportGroupPrint" checked>
+                    <label for="exportGroupPrint">Group Print Name</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="exportQty" checked>
+                    <label for="exportQty">Quantity</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="exportSale" checked>
+                    <label for="exportSale">Sale Price</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="exportPurchase" checked>
+                    <label for="exportPurchase">Purchase Price</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="exportMrp" checked>
+                    <label for="exportMrp">MRP</label>
+                </div>
+            </div>
+
+            <div class="format-buttons">
+                <button class="format-btn" onclick="exportData('csv')">📄 CSV</button>
+                <button class="format-btn" onclick="exportData('excel')">📊 Excel</button>
+                <button class="format-btn" onclick="exportData('pdf')">📕 PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
     <script>
-        // Group mapping as per your requirements
         const groupMapping = {
             'S': 'Suit',
             'P': 'Plazo',
@@ -699,19 +872,11 @@
             'T': 'Trouser'
         };
 
-        // Column order tracking
         let columnOrder = ['sale', 'purchase', 'mrp'];
-
-        // Track completed rows
         const completedRows = new Set();
-
-        // Track row data (names, groups, quantities)
         const rowData = new Map();
-
-        // History storage
         let calculationHistory = JSON.parse(localStorage.getItem('srFashionHistory')) || [];
 
-        // DOM Elements
         const priceInput = document.getElementById('priceInput');
         const clearInputBtn = document.getElementById('clearInputBtn');
         const historySection = document.getElementById('historySection');
@@ -720,24 +885,34 @@
         const historyBtn = document.getElementById('historyBtn');
         const resultsBody = document.getElementById('resultsBody');
         const actionButtons = document.getElementById('actionButtons');
+        const exportModal = document.getElementById('exportModal');
+        const exportBtn = document.getElementById('exportBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const whatsappBtn = document.getElementById('whatsappBtn');
 
-        // Initialize
         function init() {
             loadHistory();
             setupEventListeners();
         }
 
         function setupEventListeners() {
-            // Clear input button
             clearInputBtn.addEventListener('click', clearAllInput);
-
-            // History button
             historyBtn.addEventListener('click', toggleHistory);
-
-            // Clear history button
             clearHistoryBtn.addEventListener('click', clearAllHistory);
+            exportBtn.addEventListener('click', () => exportModal.style.display = 'block');
+            copyBtn.addEventListener('click', copyData);
+            whatsappBtn.addEventListener('click', shareToWhatsApp);
 
-            // Collapsible sections
+            document.querySelector('.close').addEventListener('click', () => {
+                exportModal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === exportModal) {
+                    exportModal.style.display = 'none';
+                }
+            });
+
             document.querySelectorAll('.collapsible-header').forEach(header => {
                 header.addEventListener('click', () => {
                     const section = header.parentElement;
@@ -745,7 +920,6 @@
                 });
             });
 
-            // Base selector styling
             document.querySelectorAll('.radio-option').forEach(option => {
                 option.addEventListener('click', () => {
                     document.querySelectorAll('.radio-option').forEach(o => o.classList.remove('active'));
@@ -755,7 +929,8 @@
                 });
             });
 
-            // Input listeners
+            const purchaseOpType = document.getElementById('purchaseOpType');
+            const purchaseValue = document.getElementById('purchaseValue');
             const saleOpType = document.getElementById('saleOpType');
             const saleValue = document.getElementById('saleValue');
             const saleLink = document.getElementById('saleLink');
@@ -763,7 +938,7 @@
             const mrpValue = document.getElementById('mrpValue');
             const mrpLink = document.getElementById('mrpLink');
 
-            [saleOpType, saleValue, saleLink, mrpOpType, mrpValue, mrpLink].forEach(element => {
+            [purchaseOpType, purchaseValue, saleOpType, saleValue, saleLink, mrpOpType, mrpValue, mrpLink].forEach(element => {
                 element.addEventListener('change', updateResults);
                 element.addEventListener('input', updateResults);
             });
@@ -819,14 +994,12 @@
                 baseType: document.querySelector('input[name="baseType"]:checked').value
             };
 
-            // Remove duplicates
             calculationHistory = calculationHistory.filter(item => 
                 item.inputValues !== historyItem.inputValues
             );
 
             calculationHistory.push(historyItem);
             
-            // Keep only last 50 items
             if (calculationHistory.length > 50) {
                 calculationHistory = calculationHistory.slice(-50);
             }
@@ -869,7 +1042,6 @@
             }, 2000);
         }
 
-        // Drag and drop setup
         let draggedColumn = null;
 
         function setupDragEvents() {
@@ -935,15 +1107,6 @@
             updateResults();
         }
 
-        // Get input elements
-        const saleOpType = document.getElementById('saleOpType');
-        const saleValue = document.getElementById('saleValue');
-        const saleLink = document.getElementById('saleLink');
-        const mrpOpType = document.getElementById('mrpOpType');
-        const mrpValue = document.getElementById('mrpValue');
-        const mrpLink = document.getElementById('mrpLink');
-
-        // Apply operation
         function applyOperation(base, opType, value) {
             const val = parseFloat(value);
             switch(opType) {
@@ -958,7 +1121,6 @@
             }
         }
 
-        // Reverse operation
         function reverseOperation(result, opType, value) {
             const val = parseFloat(value);
             switch(opType) {
@@ -973,38 +1135,70 @@
             }
         }
 
-        // Calculate prices
+        function roundToNearest10(value) {
+            const lastDigit = value % 10;
+            if (lastDigit <= 5) {
+                return Math.floor(value / 10) * 10;
+            } else {
+                return Math.ceil(value / 10) * 10;
+            }
+        }
+
         function calculatePrices(baseValue, baseType) {
             let purchase, sale, mrp;
+            let actualSale;
+
+            const purchaseOpType = document.getElementById('purchaseOpType').value;
+            const purchaseValue = document.getElementById('purchaseValue').value;
+            const saleOpType = document.getElementById('saleOpType').value;
+            const saleValue = document.getElementById('saleValue').value;
+            const saleLink = document.getElementById('saleLink').value;
+            const mrpOpType = document.getElementById('mrpOpType').value;
+            const mrpValue = document.getElementById('mrpValue').value;
+            const mrpLink = document.getElementById('mrpLink').value;
 
             if (baseType === 'purchase') {
-                purchase = baseValue;
-                if (saleLink.value === 'purchase') {
-                    sale = applyOperation(purchase, saleOpType.value, saleValue.value);
+                const basePurchase = applyOperation(baseValue, purchaseOpType, purchaseValue);
+                purchase = basePurchase;
+                
+                if (saleLink === 'purchase') {
+                    actualSale = applyOperation(purchase, saleOpType, saleValue);
                 } else {
-                    sale = applyOperation(purchase, saleOpType.value, saleValue.value);
+                    actualSale = applyOperation(purchase, saleOpType, saleValue);
                 }
-                if (mrpLink.value === 'sale') {
-                    mrp = applyOperation(sale, mrpOpType.value, mrpValue.value);
+                
+                sale = roundToNearest10(actualSale);
+                
+                if (mrpLink === 'sale') {
+                    mrp = applyOperation(actualSale, mrpOpType, mrpValue);
                 } else {
-                    mrp = applyOperation(purchase, mrpOpType.value, mrpValue.value);
+                    mrp = applyOperation(purchase, mrpOpType, mrpValue);
                 }
             } else {
                 mrp = baseValue;
-                if (mrpLink.value === 'sale') {
-                    sale = reverseOperation(mrp, mrpOpType.value, mrpValue.value);
-                    if (saleLink.value === 'purchase') {
-                        purchase = reverseOperation(sale, saleOpType.value, saleValue.value);
+                
+                if (mrpLink === 'sale') {
+                    actualSale = reverseOperation(mrp, mrpOpType, mrpValue);
+                    sale = roundToNearest10(actualSale);
+                    
+                    if (saleLink === 'purchase') {
+                        purchase = reverseOperation(actualSale, saleOpType, saleValue);
+                        purchase = reverseOperation(purchase, purchaseOpType, purchaseValue);
                     } else {
-                        purchase = reverseOperation(sale, saleOpType.value, saleValue.value);
+                        purchase = reverseOperation(actualSale, saleOpType, saleValue);
+                        purchase = reverseOperation(purchase, purchaseOpType, purchaseValue);
                     }
                 } else {
-                    purchase = reverseOperation(mrp, mrpOpType.value, mrpValue.value);
-                    if (saleLink.value === 'purchase') {
-                        sale = applyOperation(purchase, saleOpType.value, saleValue.value);
+                    const basePurchase = reverseOperation(mrp, mrpOpType, mrpValue);
+                    purchase = reverseOperation(basePurchase, purchaseOpType, purchaseValue);
+                    
+                    if (saleLink === 'purchase') {
+                        actualSale = applyOperation(basePurchase, saleOpType, saleValue);
                     } else {
-                        sale = applyOperation(purchase, saleOpType.value, saleValue.value);
+                        actualSale = applyOperation(basePurchase, saleOpType, saleValue);
                     }
+                    
+                    sale = roundToNearest10(actualSale);
                 }
             }
 
@@ -1013,6 +1207,10 @@
 
         function formatCurrency(value) {
             return '₹' + value.toFixed(2);
+        }
+
+        function formatPrice(value) {
+            return value.toFixed(2);
         }
 
         function updateResults() {
@@ -1049,7 +1247,6 @@
                 return;
             }
 
-            // Save to history when results are calculated
             saveToHistory();
 
             const baseType = document.querySelector('input[name="baseType"]:checked').value;
@@ -1109,7 +1306,6 @@
             resultsBody.innerHTML = html;
             actionButtons.style.display = 'flex';
             
-            // Setup drag events after table is updated
             setTimeout(setupDragEvents, 0);
         }
 
@@ -1145,7 +1341,6 @@
                 const prices = calculatePrices(value, baseType);
                 const data = rowData.get(index) || { name: '', group: '', qty: '' };
                 
-                // Get group print name from mapping
                 const groupCode = (data.group || '').toUpperCase().trim();
                 const groupPrintName = groupMapping[groupCode] || groupCode || '';
                 
@@ -1161,34 +1356,49 @@
             });
         }
 
-        // Simple copy function
+        function getSelectedFields() {
+            return {
+                name: document.getElementById('exportName').checked,
+                group: document.getElementById('exportGroup').checked,
+                groupPrintName: document.getElementById('exportGroupPrint').checked,
+                qty: document.getElementById('exportQty').checked,
+                sale: document.getElementById('exportSale').checked,
+                purchase: document.getElementById('exportPurchase').checked,
+                mrp: document.getElementById('exportMrp').checked
+            };
+        }
+
         function copyData() {
             const allData = getAllRowsData();
+            const fields = getSelectedFields();
             
             let copyText = '';
             
-            // Copy format: Name, Group, Qty, Sale, Purchase, MRP
             allData.forEach(row => {
-                copyText += `${row.name || '-'}, ${row.group || '-'}, ${row.qty || '-'}, ${formatCurrency(row.sale)}, ${formatCurrency(row.purchase)}, ${formatCurrency(row.mrp)}\n`;
+                let rowText = [];
+                if (fields.name) rowText.push(row.name || '-');
+                if (fields.groupPrintName) rowText.push(row.groupPrintName || '-');
+                if (fields.group) rowText.push(row.group || '-');
+                if (fields.qty) rowText.push(row.qty || '-');
+                if (fields.sale) rowText.push(formatPrice(row.sale));
+                if (fields.purchase) rowText.push(formatPrice(row.purchase));
+                if (fields.mrp) rowText.push(formatPrice(row.mrp));
+                
+                copyText += rowText.join(', ') + '\n';
             });
             
-            // Simple clipboard copy that works on mobile
             copyToClipboard(copyText);
         }
 
         function copyToClipboard(text) {
-            // Create a temporary textarea element
             const textarea = document.createElement('textarea');
             textarea.value = text;
             textarea.style.position = 'fixed';
             textarea.style.opacity = '0';
             
-            // Add to the document
             document.body.appendChild(textarea);
-            
-            // Select and copy
             textarea.select();
-            textarea.setSelectionRange(0, 99999); // For mobile devices
+            textarea.setSelectionRange(0, 99999);
             
             try {
                 const successful = document.execCommand('copy');
@@ -1201,78 +1411,142 @@
                 showNotification('❌ Copy failed - please try again');
             }
             
-            // Clean up
             document.body.removeChild(textarea);
         }
 
-        // WhatsApp sharing function
         function shareToWhatsApp() {
             const allData = getAllRowsData();
+            const fields = getSelectedFields();
             
             let whatsappText = 'SR FASHION - Price List\n\n';
             
-            // WhatsApp format: Name, Group, Qty, Sale, Purchase, MRP
             allData.forEach((row, index) => {
-                whatsappText += `${index + 1}. ${row.name || '-'}, ${row.group || '-'}, ${row.qty || '-'}, ${formatCurrency(row.sale)}, ${formatCurrency(row.purchase)}, ${formatCurrency(row.mrp)}\n`;
+                let rowText = [`${index + 1}.`];
+                if (fields.name) rowText.push(row.name || '-');
+                if (fields.groupPrintName) rowText.push(row.groupPrintName || '-');
+                if (fields.group) rowText.push(row.group || '-');
+                if (fields.qty) rowText.push(row.qty || '-');
+                if (fields.sale) rowText.push(formatPrice(row.sale));
+                if (fields.purchase) rowText.push(formatPrice(row.purchase));
+                if (fields.mrp) rowText.push(formatPrice(row.mrp));
+                
+                whatsappText += rowText.join(', ') + '\n';
             });
             
-            // Encode for URL
             const encodedText = encodeURIComponent(whatsappText);
-            
-            // Create WhatsApp URL
             const whatsappUrl = `https://wa.me/?text=${encodedText}`;
             
-            // Open in new window
             window.open(whatsappUrl, '_blank');
-            
             showNotification('📱 Opening WhatsApp...');
         }
 
-        // Excel export with proper group names
-        function exportToExcel() {
+        function exportData(format) {
             const allData = getAllRowsData();
+            const fields = getSelectedFields();
             
-            // Create CSV content with proper headers
-            let csv = 'ITEM NAME,ITEM PRINT NAME,ITEM GROUP,SALE PRICE,PURCHASE PRICE,MRP\n';
+            const headers = [];
+            if (fields.name) headers.push('ITEM NAME');
+            if (fields.groupPrintName) headers.push('ITEM PRINT NAME');
+            if (fields.group) headers.push('ITEM GROUP');
+            if (fields.qty) headers.push('QUANTITY');
+            if (fields.sale) headers.push('SALE PRICE');
+            if (fields.purchase) headers.push('PURCHASE PRICE');
+            if (fields.mrp) headers.push('MRP');
             
-            allData.forEach(row => {
-                const itemName = (row.name || '').replace(/"/g, '""');
-                const groupPrintName = (row.groupPrintName || '').replace(/"/g, '""');
-                const itemGroup = (row.group || '').replace(/"/g, '""');
-                
-                csv += `"${itemName}","${groupPrintName}","${itemGroup}",${row.sale.toFixed(2)},${row.purchase.toFixed(2)},${row.mrp.toFixed(2)}\n`;
+            const data = allData.map(row => {
+                const rowData = [];
+                if (fields.name) rowData.push(row.name || '');
+                if (fields.groupPrintName) rowData.push(row.groupPrintName || '');
+                if (fields.group) rowData.push(row.group || '');
+                if (fields.qty) rowData.push(row.qty || '');
+                if (fields.sale) rowData.push(formatPrice(row.sale));
+                if (fields.purchase) rowData.push(formatPrice(row.purchase));
+                if (fields.mrp) rowData.push(formatPrice(row.mrp));
+                return rowData;
+            });
+
+            if (format === 'csv') {
+                exportCSV(headers, data);
+            } else if (format === 'excel') {
+                exportExcel(headers, data);
+            } else if (format === 'pdf') {
+                exportPDF(headers, data);
+            }
+
+            exportModal.style.display = 'none';
+        }
+
+        function exportCSV(headers, data) {
+            let csv = headers.join(',') + '\n';
+            
+            data.forEach(row => {
+                csv += row.map(cell => `"${cell}"`).join(',') + '\n';
             });
             
-            // Create blob
             const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-            
-            // Create download link
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = `SR_Fashion_${new Date().toISOString().split('T')[0]}.csv`;
             
-            // For mobile devices
             if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                // Try to use FileReader for mobile
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     window.location.href = e.target.result;
                 };
                 reader.readAsDataURL(blob);
-                showNotification('📱 Check downloads for Excel file');
+                showNotification('📱 Check downloads for CSV file');
             } else {
-                // For desktop
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                showNotification('✓ Excel file downloaded!');
+                showNotification('✓ CSV file downloaded!');
             }
         }
 
-        // Initialize drag events
-        setupDragEvents();
+        function exportExcel(headers, data) {
+            const ws_data = [headers, ...data];
+            const ws = XLSX.utils.aoa_to_sheet(ws_data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "SR Fashion");
+            
+            XLSX.writeFile(wb, `SR_Fashion_${new Date().toISOString().split('T')[0]}.xlsx`);
+            showNotification('✓ Excel file downloaded!');
+        }
 
-        // Initialize app
+        function exportPDF(headers, data) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(18);
+            doc.text('SR FASHION - Price List', 14, 15);
+            
+            doc.setFontSize(10);
+            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 22);
+            
+            doc.autoTable({
+                head: [headers],
+                body: data,
+                startY: 30,
+                theme: 'grid',
+                styles: {
+                    fontSize: 9,
+                    cellPadding: 3,
+                },
+                headStyles: {
+                    fillColor: [212, 175, 55],
+                    textColor: [30, 30, 30],
+                    fontStyle: 'bold',
+                },
+                alternateRowStyles: {
+                    fillColor: [245, 245, 245],
+                },
+            });
+            
+            doc.save(`SR_Fashion_${new Date().toISOString().split('T')[0]}.pdf`);
+            showNotification('✓ PDF file downloaded!');
+        }
+
+        setupDragEvents();
         init();
     </script>
 </body>
