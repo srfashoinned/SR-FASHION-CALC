@@ -190,15 +190,14 @@
 
         .rule-items-compact {
             padding: 12px 15px;
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 10px;
-            flex-wrap: wrap;
+            align-items: center;
         }
 
         .rule-items-compact select,
         .rule-items-compact input {
-            flex: 1;
-            min-width: 100px;
             padding: 10px;
             border: 1px solid #444;
             border-radius: 6px;
@@ -206,6 +205,14 @@
             background: #1e1e1e;
             color: #d4af37;
             font-weight: 600;
+        }
+        
+        .rule-note {
+            grid-column: 1 / -1;
+            color: #d4af37;
+            font-size: 0.85em;
+            padding: 5px;
+            text-align: center;
         }
 
         .rule-items-compact select:focus,
@@ -368,6 +375,14 @@
             line-height: 1.2 !important;
         }
 
+        .serial-cell {
+            font-family: 'Courier New', monospace;
+            font-weight: 900 !important;
+            font-size: 1.1em !important;
+            text-align: center !important;
+            color: #d4af37;
+        }
+
         .empty-state {
             text-align: center;
             padding: 40px;
@@ -433,17 +448,19 @@
         }
 
         .history-list {
-            max-height: 200px;
+            max-height: 300px;
             overflow-y: auto;
         }
 
         .history-item {
-            padding: 10px;
+            padding: 12px;
             border-bottom: 1px solid #444;
             color: #d4af37;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
+            border-radius: 5px;
+            margin-bottom: 5px;
         }
 
         .history-item:hover {
@@ -452,6 +469,30 @@
 
         .history-item:last-child {
             border-bottom: none;
+        }
+
+        .history-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .history-item-time {
+            font-size: 0.9em;
+            color: #d4af37;
+        }
+
+        .history-item-values {
+            font-size: 0.85em;
+            color: #aaa;
+            margin-bottom: 3px;
+        }
+
+        .history-item-details {
+            font-size: 0.8em;
+            color: #888;
+            font-style: italic;
         }
 
         .clear-history-btn {
@@ -693,6 +734,8 @@
             <input 
                 type="text" 
                 id="priceInput" 
+                inputmode="decimal"
+                pattern="[0-9.,\s]*"
                 placeholder="Enter values (e.g., 1150 2000 3500)"
             >
             <div class="clear-input-btn" id="clearInputBtn" title="Clear all input">✕</div>
@@ -711,7 +754,8 @@
                         <option value="percentage">Add %</option>
                         <option value="absolute">Add Amount</option>
                     </select>
-                    <input type="number" id="purchaseValue" value="0" step="0.01" placeholder="Value">
+                    <input type="number" id="purchaseValue" value="0" step="0.01" placeholder="Value" inputmode="decimal">
+                    <div class="rule-note">Applied to base input values</div>
                 </div>
             </div>
         </div>
@@ -728,7 +772,7 @@
                         <option value="percentage">Add %</option>
                         <option value="absolute">Add Amount</option>
                     </select>
-                    <input type="number" id="saleValue" value="1.25" step="0.01" placeholder="Value">
+                    <input type="number" id="saleValue" value="1.25" step="0.01" placeholder="Value" inputmode="decimal">
                     <select id="saleLink">
                         <option value="purchase">From Purchase</option>
                         <option value="mrp">From MRP</option>
@@ -749,7 +793,7 @@
                         <option value="percentage">Add %</option>
                         <option value="absolute">Add Amount</option>
                     </select>
-                    <input type="number" id="mrpValue" value="2" step="0.01" placeholder="Value">
+                    <input type="number" id="mrpValue" value="2" step="0.01" placeholder="Value" inputmode="decimal">
                     <select id="mrpLink">
                         <option value="sale">From Sale</option>
                         <option value="purchase">From Purchase</option>
@@ -820,7 +864,7 @@
             <div class="checkbox-group">
                 <div class="checkbox-item">
                     <input type="checkbox" id="exportName" checked>
-                    <label for="exportName">Item Name</label>
+                    <label for="exportName">Item Name (with SR#)</label>
                 </div>
                 <div class="checkbox-item">
                     <input type="checkbox" id="exportGroup" checked>
@@ -889,6 +933,20 @@
         const exportBtn = document.getElementById('exportBtn');
         const copyBtn = document.getElementById('copyBtn');
         const whatsappBtn = document.getElementById('whatsappBtn');
+
+        // Restrict input to numbers only
+        priceInput.addEventListener('input', function(e) {
+            // Allow only numbers, spaces, commas, and decimal points
+            this.value = this.value.replace(/[^0-9.,\s]/g, '');
+        });
+
+        priceInput.addEventListener('keypress', function(e) {
+            // Allow only numbers, spaces, commas, and decimal points
+            const char = String.fromCharCode(e.which);
+            if (!/[0-9.,\s]/.test(char)) {
+                e.preventDefault();
+            }
+        });
 
         function init() {
             loadHistory();
@@ -966,34 +1024,119 @@
                 return;
             }
             
-            calculationHistory.slice(-10).reverse().forEach((item, index) => {
+            calculationHistory.slice(-20).reverse().forEach((item, index) => {
                 const historyItem = document.createElement('div');
                 historyItem.className = 'history-item';
+                
+                // Create summary of items with data
+                let itemsSummary = '';
+                if (item.rowData && item.rowData.length > 0) {
+                    const itemsWithData = item.rowData.filter(row => row.name || row.group || row.qty);
+                    if (itemsWithData.length > 0) {
+                        itemsSummary = `<div class="history-item-details">${itemsWithData.length} item(s) with details</div>`;
+                    }
+                }
+                
                 historyItem.innerHTML = `
-                    <div>${item.timestamp}</div>
-                    <div style="font-size: 0.9em; color: #aaa;">${item.inputValues}</div>
+                    <div class="history-item-header">
+                        <div class="history-item-time">${item.timestamp} - ${item.date}</div>
+                    </div>
+                    <div class="history-item-values">Values: ${item.inputValues}</div>
+                    ${itemsSummary}
                 `;
+                
                 historyItem.addEventListener('click', () => {
-                    priceInput.value = item.inputValues;
-                    updateResults();
-                    historySection.style.display = 'none';
-                    showNotification('↶ History loaded');
+                    loadHistoryItem(item);
                 });
                 historyList.appendChild(historyItem);
             });
+        }
+
+        function loadHistoryItem(item) {
+            priceInput.value = item.inputValues;
+            
+            // Restore row data
+            rowData.clear();
+            if (item.rowData && item.rowData.length > 0) {
+                item.rowData.forEach((data, index) => {
+                    rowData.set(index, {
+                        name: data.name || '',
+                        group: data.group || '',
+                        qty: data.qty || ''
+                    });
+                });
+            }
+            
+            // Restore base type
+            const baseTypeRadio = document.querySelector(`input[name="baseType"][value="${item.baseType}"]`);
+            if (baseTypeRadio) {
+                baseTypeRadio.checked = true;
+                document.querySelectorAll('.radio-option').forEach(o => o.classList.remove('active'));
+                baseTypeRadio.closest('.radio-option').classList.add('active');
+            }
+            
+            // Restore rules if available
+            if (item.rules) {
+                if (item.rules.purchase) {
+                    document.getElementById('purchaseOpType').value = item.rules.purchase.opType || 'multiply';
+                    document.getElementById('purchaseValue').value = item.rules.purchase.value || 0;
+                }
+                if (item.rules.sale) {
+                    document.getElementById('saleOpType').value = item.rules.sale.opType || 'multiply';
+                    document.getElementById('saleValue').value = item.rules.sale.value || 1.25;
+                    document.getElementById('saleLink').value = item.rules.sale.link || 'purchase';
+                }
+                if (item.rules.mrp) {
+                    document.getElementById('mrpOpType').value = item.rules.mrp.opType || 'multiply';
+                    document.getElementById('mrpValue').value = item.rules.mrp.value || 2;
+                    document.getElementById('mrpLink').value = item.rules.mrp.link || 'sale';
+                }
+            }
+            
+            updateResults();
+            historySection.style.display = 'none';
+            showNotification('↶ History loaded with all details');
         }
 
         function saveToHistory() {
             const inputValue = priceInput.value.trim();
             if (!inputValue) return;
 
+            // Collect all row data
+            const currentRowData = [];
+            rowData.forEach((data, index) => {
+                currentRowData.push({
+                    name: data.name || '',
+                    group: data.group || '',
+                    qty: data.qty || ''
+                });
+            });
+
             const historyItem = {
                 timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
                 date: new Date().toLocaleDateString(),
                 inputValues: inputValue,
-                baseType: document.querySelector('input[name="baseType"]:checked').value
+                baseType: document.querySelector('input[name="baseType"]:checked').value,
+                rowData: currentRowData,
+                rules: {
+                    purchase: {
+                        opType: document.getElementById('purchaseOpType').value,
+                        value: document.getElementById('purchaseValue').value
+                    },
+                    sale: {
+                        opType: document.getElementById('saleOpType').value,
+                        value: document.getElementById('saleValue').value,
+                        link: document.getElementById('saleLink').value
+                    },
+                    mrp: {
+                        opType: document.getElementById('mrpOpType').value,
+                        value: document.getElementById('mrpValue').value,
+                        link: document.getElementById('mrpLink').value
+                    }
+                }
             };
 
+            // Remove duplicates based on input values
             calculationHistory = calculationHistory.filter(item => 
                 item.inputValues !== historyItem.inputValues
             );
@@ -1262,15 +1405,20 @@
                 const data = rowData.get(index);
                 
                 const pairClass = `pair-${(index % 3) + 1}`;
+                const serialNumber = index + 1;
+                
+                // Get display name with serial number prepended
+                const displayName = data.name ? `${serialNumber} ${data.name}` : '';
+                const placeholderText = `${serialNumber}. Product Name`;
                 
                 html += `
                     <tr data-index="${index}" class="info-row ${pairClass} ${isCompleted ? 'completed' : ''}">
                         <td style="width: 50%;" onclick="event.stopPropagation();">
                             <input type="text" 
                                    class="editable-field" 
-                                   placeholder="Product Name" 
-                                   value="${data.name}"
-                                   onchange="updateRowData(${index}, 'name', this.value)"
+                                   placeholder="${placeholderText}" 
+                                   value="${displayName}"
+                                   onchange="updateRowDataWithSerial(${index}, 'name', this.value, ${serialNumber})"
                                    onclick="event.stopPropagation();">
                         </td>
                         <td style="width: 25%;" onclick="event.stopPropagation();">
@@ -1315,6 +1463,32 @@
             }
             const data = rowData.get(index);
             data[field] = value;
+            
+            // Save to history when data is updated
+            saveToHistory();
+        }
+
+        function updateRowDataWithSerial(index, field, value, serialNumber) {
+            if (!rowData.has(index)) {
+                rowData.set(index, { name: '', group: '', qty: '' });
+            }
+            const data = rowData.get(index);
+            
+            // Remove serial number prefix if present (e.g., "1 SNT GULAB" -> "SNT GULAB")
+            let cleanValue = value;
+            const serialPrefix = `${serialNumber} `;
+            const serialPrefixAlt = `${serialNumber}. `;
+            
+            if (cleanValue.startsWith(serialPrefix)) {
+                cleanValue = cleanValue.substring(serialPrefix.length);
+            } else if (cleanValue.startsWith(serialPrefixAlt)) {
+                cleanValue = cleanValue.substring(serialPrefixAlt.length);
+            }
+            
+            data[field] = cleanValue.trim();
+            
+            // Save to history when data is updated
+            saveToHistory();
         }
 
         function toggleComplete(index) {
@@ -1344,8 +1518,14 @@
                 const groupCode = (data.group || '').toUpperCase().trim();
                 const groupPrintName = groupMapping[groupCode] || groupCode || '';
                 
+                const serialNumber = index + 1;
+                // Prepend serial number to name for export
+                const nameWithSerial = data.name ? `${serialNumber} ${data.name.toUpperCase()}` : `${serialNumber}`;
+                
                 return { 
-                    name: (data.name || '').toUpperCase(),
+                    serial: serialNumber,
+                    name: nameWithSerial,
+                    nameOnly: (data.name || '').toUpperCase(),
                     group: (data.group || '').toUpperCase(),
                     groupPrintName: groupPrintName,
                     qty: (data.qty || '').toUpperCase(),
@@ -1420,8 +1600,8 @@
             
             let whatsappText = 'SR FASHION - Price List\n\n';
             
-            allData.forEach((row, index) => {
-                let rowText = [`${index + 1}.`];
+            allData.forEach((row) => {
+                let rowText = [];
                 if (fields.name) rowText.push(row.name || '-');
                 if (fields.groupPrintName) rowText.push(row.groupPrintName || '-');
                 if (fields.group) rowText.push(row.group || '-');
