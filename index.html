@@ -5,1729 +5,524 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SR FASHION - Pricing Calculator</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2416 100%);
-            min-height: 100vh;
-            padding: 15px;
-        }
-
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            background: #1e1e1e;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
-            padding: 20px;
-            border: 2px solid #d4af37;
-        }
-
-        h1 {
-            color: #d4af37;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2.2em;
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
-            letter-spacing: 3px;
-            font-weight: 700;
-        }
-
-        .base-selector {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .radio-option {
-            background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
-            padding: 12px 24px;
-            border-radius: 10px;
-            border: 2px solid #444;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .radio-option:hover {
-            border-color: #d4af37;
-            background: linear-gradient(135deg, #333, #2a2a2a);
-            transform: translateY(-2px);
-        }
-
-        .radio-option.active {
-            border-color: #d4af37;
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.1));
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-        }
-
-        .radio-option input[type="radio"] {
-            accent-color: #d4af37;
-        }
-
-        .radio-option span {
-            color: #d4af37;
-            font-weight: 700;
-            font-size: 1em;
-        }
-
-        .input-section {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .input-section input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #444;
-            border-radius: 10px;
-            font-size: 1.1em;
-            background: #2a2a2a;
-            color: #d4af37;
-            transition: all 0.3s;
-            font-weight: 600;
-            padding-right: 50px;
-        }
-
-        .input-section input:focus {
-            outline: none;
-            border-color: #d4af37;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-        }
-
-        .input-section input::placeholder {
-            color: #666;
-        }
-
-        .clear-input-btn {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(212, 175, 55, 0.3);
-            border: 2px solid #d4af37;
-            color: #d4af37;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2em;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .clear-input-btn:hover {
-            background: rgba(212, 175, 55, 0.5);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .collapsible-section {
-            background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
-            border: 2px solid #444;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
-
-        .collapsible-header {
-            padding: 14px 18px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(212, 175, 55, 0.15);
-            border-bottom: 2px solid #444;
-            transition: all 0.3s;
-        }
-
-        .collapsible-header:hover {
-            background: rgba(212, 175, 55, 0.25);
-        }
-
-        .collapsible-header h3 {
-            color: #d4af37;
-            font-size: 1.1em;
-            font-weight: 700;
-        }
-
-        .collapsible-arrow {
-            color: #d4af37;
-            font-size: 1.3em;
-            transition: transform 0.3s;
-            font-weight: bold;
-        }
-
-        .collapsible-section.open .collapsible-arrow {
-            transform: rotate(180deg);
-        }
-
-        .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .collapsible-section.open .collapsible-content {
-            max-height: 500px;
-        }
-
-        .rule-items {
-            padding: 15px;
-        }
-
-        .rule-items-compact {
-            padding: 12px 15px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            align-items: center;
-        }
-
-        .rule-items-compact select,
-        .rule-items-compact input {
-            padding: 10px;
-            border: 1px solid #444;
-            border-radius: 6px;
-            font-size: 0.95em;
-            background: #1e1e1e;
-            color: #d4af37;
-            font-weight: 600;
-        }
-        
-        .rule-note {
-            grid-column: 1 / -1;
-            color: #d4af37;
-            font-size: 0.85em;
-            padding: 5px;
-            text-align: center;
-        }
-
-        .rule-items-compact select:focus,
-        .rule-items-compact input:focus {
-            outline: none;
-            border-color: #d4af37;
-        }
-
-        .results-section {
-            margin-top: 20px;
-            position: relative;
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: 10px;
-            border: 2px solid #444;
-            margin-bottom: 20px;
-        }
-
-        .results-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #2a2a2a;
-            table-layout: fixed;
-        }
-
-        .results-table .info-header-row th {
-            border-bottom: 1px solid #555;
-        }
-
-        .results-table .price-header-row th {
-            border-bottom: 2px solid #444;
-        }
-
-        .results-table thead {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.2));
-        }
-
-        .results-table th {
-            padding: 12px 8px;
-            text-align: center;
-            font-weight: 700;
-            color: #d4af37;
-            font-size: 1em;
-            word-wrap: break-word;
-        }
-
-        .results-table th.draggable {
-            cursor: move;
-            user-select: none;
-            position: relative;
-        }
-
-        .results-table th.draggable::before {
-            content: '⋮⋮';
-            position: absolute;
-            left: 3px;
-            color: #666;
-            font-size: 0.8em;
-        }
-
-        .results-table th.dragging {
-            opacity: 0.5;
-            background: rgba(212, 175, 55, 0.3);
-        }
-
-        .results-table th.drag-over {
-            background: rgba(212, 175, 55, 0.4);
-        }
-
-        .results-table tbody tr.info-row {
-            background: #2a2a2a;
-        }
-
-        .results-table tbody tr.values-row {
-            background: #2a2a2a;
-            border-bottom: 3px solid #1e1e1e;
-        }
-
-        .results-table tbody tr.info-row.pair-1 {
-            background: linear-gradient(135deg, rgba(139, 69, 19, 0.2), rgba(139, 69, 19, 0.15));
-        }
-
-        .results-table tbody tr.values-row.pair-1 {
-            background: linear-gradient(135deg, rgba(139, 69, 19, 0.2), rgba(139, 69, 19, 0.15));
-        }
-
-        .results-table tbody tr.info-row.pair-2 {
-            background: linear-gradient(135deg, rgba(25, 25, 112, 0.2), rgba(25, 25, 112, 0.15));
-        }
-
-        .results-table tbody tr.values-row.pair-2 {
-            background: linear-gradient(135deg, rgba(25, 25, 112, 0.2), rgba(25, 25, 112, 0.15));
-        }
-
-        .results-table tbody tr.info-row.pair-3 {
-            background: linear-gradient(135deg, rgba(85, 107, 47, 0.2), rgba(85, 107, 47, 0.15));
-        }
-
-        .results-table tbody tr.values-row.pair-3 {
-            background: linear-gradient(135deg, rgba(85, 107, 47, 0.2), rgba(85, 107, 47, 0.15));
-        }
-
-        .results-table tbody tr:hover {
-            filter: brightness(1.15);
-        }
-
-        .results-table tbody tr.completed {
-            opacity: 0.4;
-        }
-
-        .results-table tbody tr.completed td {
-            text-decoration: line-through;
-        }
-
-        .results-table td {
-            padding: 10px 8px;
-            color: #d4af37;
-            transition: all 0.3s;
-            font-weight: 700;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .editable-field {
-            background: transparent;
-            border: 1px solid transparent;
-            color: #d4af37;
-            padding: 6px 8px;
-            border-radius: 4px;
-            width: 100%;
-            font-size: 1em;
-            transition: all 0.2s;
-            font-weight: 700;
-        }
-
-        .editable-field:focus {
-            outline: none;
-            border-color: #d4af37;
-            background: rgba(212, 175, 55, 0.1);
-        }
-
-        .editable-field::placeholder {
-            color: #555;
-        }
-
-        .price-cell {
-            font-family: 'Courier New', monospace;
-            cursor: pointer;
-            padding: 12px 8px !important;
-            font-weight: 900 !important;
-            font-size: 1.3em !important;
-            letter-spacing: 1px;
-            text-align: center !important;
-            white-space: nowrap !important;
-            overflow: visible !important;
-            text-overflow: clip !important;
-            text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
-            line-height: 1.2 !important;
-        }
-
-        .serial-cell {
-            font-family: 'Courier New', monospace;
-            font-weight: 900 !important;
-            font-size: 1.1em !important;
-            text-align: center !important;
-            color: #d4af37;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-            font-style: italic;
-            font-size: 1.1em;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-            position: relative;
-            z-index: 100;
-        }
-
-        .main-action-btn {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.2));
-            border: 3px solid #d4af37;
-            color: #d4af37;
-            padding: 12px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 700;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
-            min-width: 120px;
-            text-align: center;
-            display: inline-block;
-        }
-
-        .main-action-btn:hover {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.4), rgba(212, 175, 55, 0.3));
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
-        }
-
-        .main-action-btn:active {
-            transform: translateY(0);
-        }
-
-        .history-section {
-            margin-top: 20px;
-            background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
-            border: 2px solid #444;
-            border-radius: 10px;
-            padding: 15px;
-            display: none;
-            z-index: 99;
-            position: relative;
-        }
-
-        .history-section h3 {
-            color: #d4af37;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .history-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .history-item {
-            padding: 12px;
-            border-bottom: 1px solid #444;
-            color: #d4af37;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            border-radius: 5px;
-            margin-bottom: 5px;
-        }
-
-        .history-item:hover {
-            background: rgba(212, 175, 55, 0.1);
-        }
-
-        .history-item:last-child {
-            border-bottom: none;
-        }
-
-        .history-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-
-        .history-item-time {
-            font-size: 0.9em;
-            color: #d4af37;
-        }
-
-        .history-item-values {
-            font-size: 0.85em;
-            color: #aaa;
-            margin-bottom: 3px;
-        }
-
-        .history-item-details {
-            font-size: 0.8em;
-            color: #888;
-            font-style: italic;
-        }
-
-        .clear-history-btn {
-            background: rgba(212, 175, 55, 0.2);
-            border: 2px solid #d4af37;
-            color: #d4af37;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-
-        .clear-history-btn:hover {
-            background: rgba(212, 175, 55, 0.4);
-        }
-
-        .whatsapp-btn {
-            background: linear-gradient(135deg, rgba(37, 211, 102, 0.3), rgba(37, 211, 102, 0.2));
-            border: 3px solid #25D366;
-        }
-
-        .whatsapp-btn:hover {
-            background: linear-gradient(135deg, rgba(37, 211, 102, 0.4), rgba(37, 211, 102, 0.3));
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
-            margin: 10% auto;
-            padding: 25px;
-            border: 3px solid #d4af37;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.5);
-        }
-
-        .modal-header {
-            color: #d4af37;
-            font-size: 1.5em;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-align: center;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-        }
-
-        .close {
-            color: #d4af37;
-            float: right;
-            font-size: 32px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 20px;
-            transition: all 0.3s;
-        }
-
-        .close:hover {
-            color: #fff;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
-        }
-
-        .checkbox-group {
-            margin: 15px 0;
-        }
-
-        .checkbox-item {
-            background: rgba(212, 175, 55, 0.1);
-            border: 2px solid #444;
-            border-radius: 8px;
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .checkbox-item:hover {
-            border-color: #d4af37;
-            background: rgba(212, 175, 55, 0.2);
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            margin-right: 12px;
-            cursor: pointer;
-            accent-color: #d4af37;
-        }
-
-        .checkbox-item label {
-            color: #d4af37;
-            font-weight: 600;
-            font-size: 1.05em;
-            cursor: pointer;
-            flex: 1;
-        }
-
-        .format-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .format-btn {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.2));
-            border: 2px solid #d4af37;
-            color: #d4af37;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.95em;
-            font-weight: 700;
-            transition: all 0.3s;
-            flex: 1;
-            min-width: 100px;
-        }
-
-        .format-btn:hover {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.4), rgba(212, 175, 55, 0.3));
-            transform: translateY(-2px);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #1a1a1a 0%, #2d2416 100%); min-height: 100vh; padding: 15px; }
+        .container { max-width: 100%; margin: 0 auto; background: #1e1e1e; border-radius: 15px; box-shadow: 0 10px 40px rgba(212,175,55,0.3); padding: 20px; border: 2px solid #d4af37; }
+        h1 { color: #d4af37; text-align: center; margin-bottom: 20px; font-size: 2.2em; text-shadow: 0 0 20px rgba(212,175,55,0.5); letter-spacing: 3px; font-weight: 700; }
+        .base-selector { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .radio-option { background: linear-gradient(135deg, #2a2a2a, #1e1e1e); padding: 12px 24px; border-radius: 10px; border: 2px solid #444; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
+        .radio-option:hover { border-color: #d4af37; background: linear-gradient(135deg, #333, #2a2a2a); transform: translateY(-2px); }
+        .radio-option.active { border-color: #d4af37; background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.1)); box-shadow: 0 0 15px rgba(212,175,55,0.3); }
+        .radio-option input[type="radio"] { accent-color: #d4af37; }
+        .radio-option span { color: #d4af37; font-weight: 700; font-size: 1em; }
+
+        .input-section { margin-bottom: 15px; position: relative; }
+        .input-section input { width: 100%; padding: 15px 50px 15px 15px; border: 2px solid #444; border-radius: 10px; font-size: 1.1em; background: #2a2a2a; color: #d4af37; transition: all 0.3s; font-weight: 600; }
+        .input-section input:focus { outline: none; border-color: #d4af37; box-shadow: 0 0 20px rgba(212,175,55,0.4); }
+        .input-section input::placeholder { color: #666; }
+        .clear-input-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(212,175,55,0.3); border: 2px solid #d4af37; color: #d4af37; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2em; font-weight: bold; transition: all 0.3s; }
+        .clear-input-btn:hover { background: rgba(212,175,55,0.5); transform: translateY(-50%) scale(1.1); }
+
+        .toggle-row { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; background: linear-gradient(135deg, #2a2a2a, #1e1e1e); border: 2px solid #444; border-radius: 10px; padding: 12px 16px; flex-wrap: wrap; }
+        .toggle-label { color: #d4af37; font-weight: 700; font-size: 0.95em; }
+        .toggle-switch { position: relative; width: 50px; height: 26px; flex-shrink: 0; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: 0.3s; border-radius: 26px; }
+        .toggle-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: #888; transition: 0.3s; border-radius: 50%; }
+        .toggle-switch input:checked + .toggle-slider { background-color: rgba(212,175,55,0.4); border: 1px solid #d4af37; }
+        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(24px); background-color: #d4af37; }
+        .toggle-hint { color: #888; font-size: 0.8em; font-style: italic; }
+
+        .collapsible-section { background: linear-gradient(135deg, #2a2a2a, #1e1e1e); border: 2px solid #444; border-radius: 10px; margin-bottom: 15px; overflow: hidden; }
+        .collapsible-header { padding: 14px 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: rgba(212,175,55,0.15); border-bottom: 2px solid #444; transition: background 0.3s; }
+        .collapsible-header:hover { background: rgba(212,175,55,0.25); }
+        .collapsible-header h3 { color: #d4af37; font-size: 1.1em; font-weight: 700; }
+        .collapsible-arrow { color: #d4af37; font-size: 1.3em; transition: transform 0.3s; font-weight: bold; }
+        .collapsible-section.open .collapsible-arrow { transform: rotate(180deg); }
+        .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .collapsible-section.open .collapsible-content { max-height: 500px; }
+        .rule-items-compact { padding: 12px 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; align-items: center; }
+        .rule-items-compact select, .rule-items-compact input { padding: 10px; border: 1px solid #444; border-radius: 6px; font-size: 0.95em; background: #1e1e1e; color: #d4af37; font-weight: 600; }
+        .rule-note { grid-column: 1 / -1; color: #d4af37; font-size: 0.85em; padding: 5px; text-align: center; }
+        .rule-items-compact select:focus, .rule-items-compact input:focus { outline: none; border-color: #d4af37; }
+
+        .results-section { margin-top: 20px; }
+        .table-wrapper { overflow-x: auto; border-radius: 10px; border: 2px solid #444; margin-bottom: 20px; }
+        .results-table { width: 100%; border-collapse: collapse; background: #2a2a2a; table-layout: fixed; }
+        .results-table .info-header-row th { border-bottom: 1px solid #555; }
+        .results-table .price-header-row th { border-bottom: 2px solid #444; }
+        .results-table thead { background: linear-gradient(135deg, rgba(212,175,55,0.3), rgba(212,175,55,0.2)); }
+        .results-table th { padding: 12px 8px; text-align: center; font-weight: 700; color: #d4af37; font-size: 1em; word-wrap: break-word; }
+        .results-table th.draggable { cursor: move; user-select: none; position: relative; }
+        .results-table th.draggable::before { content: '⋮⋮'; position: absolute; left: 3px; color: #666; font-size: 0.8em; }
+        .results-table th.dragging { opacity: 0.5; background: rgba(212,175,55,0.3); }
+        .results-table th.drag-over { background: rgba(212,175,55,0.4); }
+        .results-table tbody tr { background: #2a2a2a; }
+        .results-table tbody tr.values-row { border-bottom: 3px solid #1e1e1e; }
+        .results-table tbody tr.pair-1 { background: linear-gradient(135deg, rgba(139,69,19,0.2), rgba(139,69,19,0.15)); }
+        .results-table tbody tr.pair-2 { background: linear-gradient(135deg, rgba(25,25,112,0.2), rgba(25,25,112,0.15)); }
+        .results-table tbody tr.pair-3 { background: linear-gradient(135deg, rgba(85,107,47,0.2), rgba(85,107,47,0.15)); }
+        .results-table tbody tr:hover { filter: brightness(1.15); }
+        .results-table tbody tr.completed { opacity: 0.4; }
+        .results-table tbody tr.completed td { text-decoration: line-through; }
+        .results-table td { padding: 10px 8px; color: #d4af37; transition: all 0.3s; font-weight: 700; word-wrap: break-word; overflow-wrap: break-word; }
+        .editable-field { background: transparent; border: 1px solid transparent; color: #d4af37; padding: 6px 8px; border-radius: 4px; width: 100%; font-size: 1em; transition: all 0.2s; font-weight: 700; }
+        .editable-field:focus { outline: none; border-color: #d4af37; background: rgba(212,175,55,0.1); }
+        .editable-field::placeholder { color: #555; }
+        .price-cell { font-family: 'Courier New', monospace; cursor: pointer; padding: 12px 8px !important; font-weight: 900 !important; font-size: 1.3em !important; letter-spacing: 1px; text-align: center !important; white-space: nowrap !important; text-shadow: 0 0 8px rgba(212,175,55,0.4); line-height: 1.2 !important; }
+        .empty-state { text-align: center; padding: 40px; color: #666; font-style: italic; font-size: 1.1em; }
+
+        .action-buttons { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+        .main-action-btn { background: linear-gradient(135deg, rgba(212,175,55,0.3), rgba(212,175,55,0.2)); border: 3px solid #d4af37; color: #d4af37; padding: 12px 20px; border-radius: 12px; cursor: pointer; font-size: 1em; font-weight: 700; transition: all 0.3s; box-shadow: 0 4px 15px rgba(212,175,55,0.2); min-width: 120px; text-align: center; }
+        .main-action-btn:hover { background: linear-gradient(135deg, rgba(212,175,55,0.4), rgba(212,175,55,0.3)); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(212,175,55,0.4); }
+        .main-action-btn:active { transform: translateY(0); }
+        .whatsapp-btn { background: linear-gradient(135deg, rgba(37,211,102,0.3), rgba(37,211,102,0.2)); border: 3px solid #25D366; color: #25D366; }
+        .whatsapp-btn:hover { background: linear-gradient(135deg, rgba(37,211,102,0.4), rgba(37,211,102,0.3)); }
+
+        .history-section { margin-top: 20px; background: linear-gradient(135deg, #2a2a2a, #1e1e1e); border: 2px solid #444; border-radius: 10px; padding: 15px; display: none; }
+        .history-section h3 { color: #d4af37; margin-bottom: 10px; font-size: 1.1em; display: flex; justify-content: space-between; align-items: center; }
+        .history-list { max-height: 300px; overflow-y: auto; }
+        .history-item { padding: 12px; border-bottom: 1px solid #444; color: #d4af37; font-weight: 600; cursor: pointer; transition: all 0.2s; border-radius: 5px; margin-bottom: 5px; }
+        .history-item:hover { background: rgba(212,175,55,0.1); }
+        .history-item:last-child { border-bottom: none; }
+        .history-item-time { font-size: 0.9em; color: #d4af37; margin-bottom: 4px; }
+        .history-item-values { font-size: 0.85em; color: #aaa; margin-bottom: 3px; }
+        .history-item-details { font-size: 0.8em; color: #888; font-style: italic; }
+        .clear-history-btn { background: rgba(212,175,55,0.2); border: 2px solid #d4af37; color: #d4af37; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.9em; font-weight: 700; transition: all 0.3s; }
+        .clear-history-btn:hover { background: rgba(212,175,55,0.4); }
+
+        /* MODAL — scrollable, never clips off screen */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(4px); overflow-y: auto; padding: 30px 15px; }
+        .modal-content { background: linear-gradient(135deg, #2a2a2a, #1e1e1e); margin: 0 auto; padding: 24px 20px 20px; border: 3px solid #d4af37; border-radius: 15px; width: 100%; max-width: 440px; box-shadow: 0 10px 40px rgba(212,175,55,0.5); position: relative; }
+        .modal-header { color: #d4af37; font-size: 1.3em; font-weight: 700; margin-bottom: 18px; text-align: center; padding-right: 28px; }
+        .close { color: #d4af37; position: absolute; top: 14px; right: 16px; font-size: 26px; font-weight: bold; cursor: pointer; line-height: 1; transition: color 0.3s; }
+        .close:hover { color: #fff; }
+        .checkbox-group { margin: 12px 0; }
+        .checkbox-item { background: rgba(212,175,55,0.1); border: 2px solid #444; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; display: flex; align-items: center; cursor: pointer; transition: all 0.3s; }
+        .checkbox-item:hover { border-color: #d4af37; background: rgba(212,175,55,0.2); }
+        .checkbox-item input[type="checkbox"] { width: 18px; height: 18px; margin-right: 12px; cursor: pointer; accent-color: #d4af37; flex-shrink: 0; }
+        .checkbox-item label { color: #d4af37; font-weight: 600; font-size: 0.95em; cursor: pointer; flex: 1; }
+        .format-buttons { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; justify-content: center; }
+        .format-btn { background: linear-gradient(135deg, rgba(212,175,55,0.3), rgba(212,175,55,0.2)); border: 2px solid #d4af37; color: #d4af37; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 700; transition: all 0.3s; flex: 1; min-width: 80px; }
+        .format-btn:hover { background: linear-gradient(135deg, rgba(212,175,55,0.4), rgba(212,175,55,0.3)); transform: translateY(-2px); }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 12px;
-            }
-
-            h1 {
-                font-size: 1.6em;
-                letter-spacing: 2px;
-            }
-
-            .results-table {
-                font-size: 0.85em;
-            }
-
-            .results-table th,
-            .results-table td {
-                padding: 8px 4px !important;
-                font-size: 0.95em;
-            }
-
-            .price-cell {
-                padding: 10px 4px !important;
-                font-size: 1.1em !important;
-                font-weight: 900 !important;
-                white-space: nowrap !important;
-                overflow: hidden !important;
-                text-overflow: ellipsis !important;
-                line-height: 1.2 !important;
-                min-width: 0;
-            }
-
-            .editable-field {
-                font-size: 0.85em;
-                padding: 4px 6px;
-            }
-
-            .main-action-btn {
-                padding: 12px 15px;
-                font-size: 0.95em;
-                min-width: 100px;
-            }
-
-            .action-buttons {
-                gap: 8px;
-            }
-
-            .table-wrapper {
-                margin-bottom: 20px;
-            }
-
-            .clear-input-btn {
-                width: 32px;
-                height: 32px;
-                font-size: 1em;
-            }
-
-            .modal-content {
-                margin: 20% auto;
-                width: 95%;
-                padding: 20px;
-            }
+            .container { padding: 12px; } h1 { font-size: 1.6em; letter-spacing: 2px; }
+            .results-table th, .results-table td { padding: 8px 4px !important; font-size: 0.9em; }
+            .price-cell { font-size: 1.05em !important; }
+            .editable-field { font-size: 0.85em; padding: 4px 6px; }
+            .main-action-btn { padding: 11px 14px; font-size: 0.9em; min-width: 100px; }
         }
-
         @media (max-width: 480px) {
-            .action-buttons {
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-            
-            .main-action-btn {
-                flex: 1;
-                min-width: calc(50% - 10px);
-                margin-bottom: 8px;
-                font-size: 0.9em;
-                padding: 10px 12px;
-            }
-            
-            .price-cell {
-                font-size: 1em !important;
-            }
+            .main-action-btn { flex: 1; min-width: calc(50% - 8px); font-size: 0.88em; padding: 10px 10px; }
+            .price-cell { font-size: 1em !important; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>SR FASHION</h1>
+<div class="container">
+    <h1>SR FASHION</h1>
 
-        <div class="base-selector">
-            <label class="radio-option active" data-value="purchase">
-                <input type="radio" name="baseType" value="purchase" checked>
-                <span>Purchase Price</span>
-            </label>
-            <label class="radio-option" data-value="mrp">
-                <input type="radio" name="baseType" value="mrp">
-                <span>MRP</span>
-            </label>
-        </div>
+    <div class="base-selector">
+        <label class="radio-option active" data-value="purchase">
+            <input type="radio" name="baseType" value="purchase" checked><span>Purchase Price</span>
+        </label>
+        <label class="radio-option" data-value="mrp">
+            <input type="radio" name="baseType" value="mrp"><span>MRP</span>
+        </label>
+    </div>
 
-        <div class="input-section">
-            <input 
-                type="text" 
-                id="priceInput" 
-                inputmode="decimal"
-                pattern="[0-9.,\s]*"
-                placeholder="Enter values (e.g., 1150 2000 3500)"
-            >
-            <div class="clear-input-btn" id="clearInputBtn" title="Clear all input">✕</div>
-        </div>
+    <div class="input-section">
+        <input type="text" id="priceInput" inputmode="decimal" pattern="[0-9.,\s]*" placeholder="Enter values (e.g., 1150 2000 3500)">
+        <div class="clear-input-btn" id="clearInputBtn" title="Clear input">✕</div>
+    </div>
 
-        <!-- Purchase Price Rules Section -->
-        <div class="collapsible-section" id="purchaseSection">
-            <div class="collapsible-header">
-                <h3>💰 Purchase Price Rules</h3>
-                <span class="collapsible-arrow">▼</span>
-            </div>
-            <div class="collapsible-content">
-                <div class="rule-items-compact">
-                    <select id="purchaseOpType">
-                        <option value="multiply">Multiply</option>
-                        <option value="percentage">Add %</option>
-                        <option value="absolute">Add Amount</option>
-                    </select>
-                    <input type="number" id="purchaseValue" value="0" step="0.01" placeholder="Value" inputmode="decimal">
-                    <div class="rule-note">Applied to base input values</div>
-                </div>
-            </div>
-        </div>
+    <div class="toggle-row">
+        <span class="toggle-label">🔢 Auto-Number Names</span>
+        <label class="toggle-switch">
+            <input type="checkbox" id="autoNumberToggle" checked>
+            <span class="toggle-slider"></span>
+        </label>
+        <span class="toggle-hint">Prefix names with 1, 2, 3… in table &amp; export</span>
+    </div>
 
-        <div class="collapsible-section" id="saleSection">
-            <div class="collapsible-header">
-                <h3>📊 Sale Price Rules</h3>
-                <span class="collapsible-arrow">▼</span>
-            </div>
-            <div class="collapsible-content">
-                <div class="rule-items-compact">
-                    <select id="saleOpType">
-                        <option value="multiply">Multiply</option>
-                        <option value="percentage">Add %</option>
-                        <option value="absolute">Add Amount</option>
-                    </select>
-                    <input type="number" id="saleValue" value="1.25" step="0.01" placeholder="Value" inputmode="decimal">
-                    <select id="saleLink">
-                        <option value="purchase">From Purchase</option>
-                        <option value="mrp">From MRP</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="collapsible-section" id="mrpSection">
-            <div class="collapsible-header">
-                <h3>🏷️ MRP Rules</h3>
-                <span class="collapsible-arrow">▼</span>
-            </div>
-            <div class="collapsible-content">
-                <div class="rule-items-compact">
-                    <select id="mrpOpType">
-                        <option value="multiply">Multiply</option>
-                        <option value="percentage">Add %</option>
-                        <option value="absolute">Add Amount</option>
-                    </select>
-                    <input type="number" id="mrpValue" value="2" step="0.01" placeholder="Value" inputmode="decimal">
-                    <select id="mrpLink">
-                        <option value="sale">From Sale</option>
-                        <option value="purchase">From Purchase</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="history-section" id="historySection">
-            <h3>
-                <span>📜 History</span>
-                <button class="clear-history-btn" id="clearHistoryBtn">Clear All</button>
-            </h3>
-            <div class="history-list" id="historyList"></div>
-        </div>
-
-        <div class="results-section">
-            <div class="table-wrapper">
-                <table class="results-table">
-                    <thead>
-                        <tr class="info-header-row">
-                            <th style="width: 50%;">NAME</th>
-                            <th style="width: 25%;">GROUP</th>
-                            <th style="width: 25%;">QTY</th>
-                        </tr>
-                        <tr class="price-header-row" id="priceHeader">
-                            <th class="draggable" data-column="sale" style="width: 33.33%;">SALE</th>
-                            <th class="draggable" data-column="purchase" style="width: 33.33%;">PURC</th>
-                            <th class="draggable" data-column="mrp" style="width: 33.33%;">MRP</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resultsBody">
-                        <tr>
-                            <td colspan="3" class="empty-state">
-                                Enter values above to see calculations
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div id="actionButtons" class="action-buttons" style="display: none;">
-                <button class="main-action-btn" id="historyBtn">
-                    📜 HISTORY
-                </button>
-
-                <button class="main-action-btn" id="copyBtn">
-                    📋 COPY
-                </button>
-
-                <button class="main-action-btn whatsapp-btn" id="whatsappBtn">
-                    💬 WHATSAPP
-                </button>
-
-                <button class="main-action-btn" id="exportBtn">
-                    📤 EXPORT
-                </button>
+    <div class="collapsible-section">
+        <div class="collapsible-header"><h3>💰 Purchase Price Rules</h3><span class="collapsible-arrow">▼</span></div>
+        <div class="collapsible-content">
+            <div class="rule-items-compact">
+                <select id="purchaseOpType"><option value="multiply">Multiply</option><option value="percentage">Add %</option><option value="absolute">Add Amount</option></select>
+                <input type="number" id="purchaseValue" value="1" step="0.01" placeholder="Value" inputmode="decimal">
+                <div class="rule-note">Default ×1 = no change to input value</div>
             </div>
         </div>
     </div>
 
-    <!-- Export Modal -->
-    <div id="exportModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div class="modal-header">📤 Export Options</div>
-            
-            <div class="checkbox-group">
-                <div class="checkbox-item">
-                    <input type="checkbox" id="exportName" checked>
-                    <label for="exportName">Item Name (with SR#)</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="exportGroup" checked>
-                    <label for="exportGroup">Item Group</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="exportGroupPrint" checked>
-                    <label for="exportGroupPrint">Group Print Name</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="exportQty" checked>
-                    <label for="exportQty">Quantity</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="exportSale" checked>
-                    <label for="exportSale">Sale Price</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="exportPurchase" checked>
-                    <label for="exportPurchase">Purchase Price</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="exportMrp" checked>
-                    <label for="exportMrp">MRP</label>
-                </div>
-            </div>
-
-            <div class="format-buttons">
-                <button class="format-btn" onclick="exportData('csv')">📄 CSV</button>
-                <button class="format-btn" onclick="exportData('excel')">📊 Excel</button>
-                <button class="format-btn" onclick="exportData('pdf')">📕 PDF</button>
+    <div class="collapsible-section">
+        <div class="collapsible-header"><h3>📊 Sale Price Rules</h3><span class="collapsible-arrow">▼</span></div>
+        <div class="collapsible-content">
+            <div class="rule-items-compact">
+                <select id="saleOpType"><option value="multiply">Multiply</option><option value="percentage">Add %</option><option value="absolute">Add Amount</option></select>
+                <input type="number" id="saleValue" value="1.25" step="0.01" placeholder="Value" inputmode="decimal">
+                <select id="saleLink"><option value="purchase">From Purchase</option><option value="mrp">From MRP</option></select>
             </div>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    
-    <script>
-        const groupMapping = {
-            'S': 'Suit',
-            'P': 'Plazo',
-            'G': 'Garara',
-            'CC': 'Catalogue',
-            'CS': 'Cotton Suit',
-            'FARSHI': 'Farshi',
-            'RP': 'Russian Plazo',
-            'T': 'Trouser'
-        };
+    <div class="collapsible-section">
+        <div class="collapsible-header"><h3>🏷️ MRP Rules</h3><span class="collapsible-arrow">▼</span></div>
+        <div class="collapsible-content">
+            <div class="rule-items-compact">
+                <select id="mrpOpType"><option value="multiply">Multiply</option><option value="percentage">Add %</option><option value="absolute">Add Amount</option></select>
+                <input type="number" id="mrpValue" value="2" step="0.01" placeholder="Value" inputmode="decimal">
+                <select id="mrpLink"><option value="sale">From Sale</option><option value="purchase">From Purchase</option></select>
+            </div>
+        </div>
+    </div>
 
-        let columnOrder = ['sale', 'purchase', 'mrp'];
-        const completedRows = new Set();
-        const rowData = new Map();
-        let calculationHistory = JSON.parse(localStorage.getItem('srFashionHistory')) || [];
+    <div class="history-section" id="historySection">
+        <h3><span>📜 History</span><button class="clear-history-btn" id="clearHistoryBtn">Clear All</button></h3>
+        <div class="history-list" id="historyList"></div>
+    </div>
 
-        const priceInput = document.getElementById('priceInput');
-        const clearInputBtn = document.getElementById('clearInputBtn');
-        const historySection = document.getElementById('historySection');
-        const historyList = document.getElementById('historyList');
-        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
-        const historyBtn = document.getElementById('historyBtn');
-        const resultsBody = document.getElementById('resultsBody');
-        const actionButtons = document.getElementById('actionButtons');
-        const exportModal = document.getElementById('exportModal');
-        const exportBtn = document.getElementById('exportBtn');
-        const copyBtn = document.getElementById('copyBtn');
-        const whatsappBtn = document.getElementById('whatsappBtn');
+    <div class="results-section">
+        <div class="table-wrapper">
+            <table class="results-table">
+                <thead>
+                    <tr class="info-header-row">
+                        <th style="width:45%">NAME</th>
+                        <th style="width:25%">GROUP</th>
+                        <th style="width:30%">QTY</th>
+                    </tr>
+                    <tr class="price-header-row" id="priceHeader">
+                        <th class="draggable" data-column="sale" style="width:33.33%">SALE</th>
+                        <th class="draggable" data-column="purchase" style="width:33.33%">PURC</th>
+                        <th class="draggable" data-column="mrp" style="width:33.33%">MRP</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsBody">
+                    <tr><td colspan="3" class="empty-state">Enter values above to see calculations</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="actionButtons" class="action-buttons" style="display:none">
+            <button class="main-action-btn" id="historyBtn">📜 HISTORY</button>
+            <button class="main-action-btn" id="copyBtn">📋 COPY</button>
+            <button class="main-action-btn whatsapp-btn" id="whatsappBtn">💬 WHATSAPP</button>
+            <button class="main-action-btn" id="exportBtn">📤 EXPORT</button>
+        </div>
+    </div>
+</div>
 
-        // Restrict input to numbers only
-        priceInput.addEventListener('input', function(e) {
-            // Allow only numbers, spaces, commas, and decimal points
-            this.value = this.value.replace(/[^0-9.,\s]/g, '');
+<!-- Export Modal -->
+<div id="exportModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="modalClose">&times;</span>
+        <div class="modal-header">📤 Export Options</div>
+        <div class="checkbox-group">
+            <div class="checkbox-item"><input type="checkbox" id="exportName" checked><label for="exportName">Item Name</label></div>
+            <div class="checkbox-item"><input type="checkbox" id="exportGroup" checked><label for="exportGroup">Item Group (auto full name)</label></div>
+            <div class="checkbox-item"><input type="checkbox" id="exportSale" checked><label for="exportSale">Sale Price</label></div>
+            <div class="checkbox-item"><input type="checkbox" id="exportPurchase" checked><label for="exportPurchase">Purchase Price</label></div>
+            <div class="checkbox-item"><input type="checkbox" id="exportMrp" checked><label for="exportMrp">MRP</label></div>
+            <div class="checkbox-item"><input type="checkbox" id="exportQty" checked><label for="exportQty">Quantity (always last)</label></div>
+        </div>
+        <div class="format-buttons">
+            <button class="format-btn" onclick="exportData('csv')">📄 CSV</button>
+            <button class="format-btn" onclick="exportData('excel')">📊 Excel</button>
+            <button class="format-btn" onclick="exportData('pdf')">📕 PDF</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+const GROUP_MAP = {
+    'S':'Suit','P':'Plazo','G':'Garara','CC':'Catalogue Suit','CS':'Cotton Suit',
+    'FARSHI':'Farshi','RP':'Russian Plazo','T':'Trouser','PAP':'Paplón','PAPLON':'Paplón',
+    'LS':'Lawn Suit','SS':'Silk Suit','ES':'Embroidered Suit','GS':'Georgette Suit',
+    'NET':'Net Suit','VL':'Velvet Suit','JS':'Jacquard Suit','K':'Kurti','KP':'Kurti Plazo',
+    'D':'Dupatta','L':'Lehenga','LC':'Lehenga Choli','SC':'Salwar Suit','SH':'Sharara',
+    'GP':'Gharara Plazo','ANK':'Anarkali','MX':'Maxi','GWN':'Gown','SRT':'Sherwani',
+    'BLZ':'Blazer','JKT':'Jacket','SET':'Co-ord Set','SKT':'Skirt','JMP':'Jumpsuit',
+    'INDO':'Indo-Western','KAF':'Kaftan','SAR':'Saree','BLS':'Blouse','STL':'Stole',
+};
+function expandGroup(c) { const k=(c||'').toUpperCase().trim(); return GROUP_MAP[k]||c||''; }
+
+let columnOrder=['sale','purchase','mrp'];
+const completedRows=new Set(), rowData=new Map();
+let calcHistory=JSON.parse(localStorage.getItem('srFashionHistory')||'[]');
+
+const priceInput=document.getElementById('priceInput');
+const autoNumTog=document.getElementById('autoNumberToggle');
+
+priceInput.addEventListener('input',function(){this.value=this.value.replace(/[^0-9.,\s]/g,'');});
+priceInput.addEventListener('keypress',function(e){if(!/[0-9.,\s]/.test(String.fromCharCode(e.which)))e.preventDefault();});
+
+function init(){
+    loadHistory();
+    document.getElementById('clearInputBtn').addEventListener('click',()=>{priceInput.value='';rowData.clear();completedRows.clear();updateResults();showNotif('✕ Cleared');});
+    document.getElementById('historyBtn').addEventListener('click',()=>{const hs=document.getElementById('historySection');hs.style.display=hs.style.display==='block'?'none':'block';});
+    document.getElementById('clearHistoryBtn').addEventListener('click',clearAllHistory);
+    document.getElementById('exportBtn').addEventListener('click',()=>{document.getElementById('exportModal').style.display='block';});
+    document.getElementById('modalClose').addEventListener('click',()=>{document.getElementById('exportModal').style.display='none';});
+    document.getElementById('exportModal').addEventListener('click',e=>{if(e.target===document.getElementById('exportModal'))document.getElementById('exportModal').style.display='none';});
+    document.getElementById('copyBtn').addEventListener('click',copyData);
+    document.getElementById('whatsappBtn').addEventListener('click',shareWA);
+    autoNumTog.addEventListener('change',updateResults);
+    document.querySelectorAll('.collapsible-header').forEach(h=>h.addEventListener('click',()=>h.parentElement.classList.toggle('open')));
+    document.querySelectorAll('.radio-option').forEach(opt=>{
+        opt.addEventListener('click',()=>{
+            document.querySelectorAll('.radio-option').forEach(o=>o.classList.remove('active'));
+            opt.classList.add('active'); opt.querySelector('input').checked=true; updateResults();
         });
+    });
+    ['purchaseOpType','purchaseValue','saleOpType','saleValue','saleLink','mrpOpType','mrpValue','mrpLink'].forEach(id=>{
+        const el=document.getElementById(id);
+        el.addEventListener('change',updateResults); el.addEventListener('input',updateResults);
+    });
+    priceInput.addEventListener('input',updateResults);
+}
 
-        priceInput.addEventListener('keypress', function(e) {
-            // Allow only numbers, spaces, commas, and decimal points
-            const char = String.fromCharCode(e.which);
-            if (!/[0-9.,\s]/.test(char)) {
-                e.preventDefault();
+function showNotif(msg){
+    const n=document.createElement('div');
+    n.style.cssText='position:fixed;top:20px;right:20px;background:rgba(212,175,55,0.95);color:#1e1e1e;padding:15px 25px;border-radius:8px;font-weight:700;z-index:10000;box-shadow:0 4px 12px rgba(0,0,0,0.3);font-size:1.1em;';
+    n.textContent=msg; document.body.appendChild(n);
+    setTimeout(()=>{n.style.transition='opacity 0.3s';n.style.opacity='0';setTimeout(()=>n.remove(),300);},2000);
+}
+
+function loadHistory(){
+    const hl=document.getElementById('historyList'); hl.innerHTML='';
+    if(!calcHistory.length){hl.innerHTML='<div class="history-item" style="color:#666;font-style:italic;">No history yet</div>';return;}
+    calcHistory.slice(-20).reverse().forEach(item=>{
+        const d=document.createElement('div'); d.className='history-item';
+        const wd=(item.rowData||[]).filter(r=>r.name||r.group||r.qty);
+        d.innerHTML=`<div class="history-item-time">${item.timestamp} - ${item.date}</div>
+            <div class="history-item-values">Values: ${item.inputValues}</div>
+            ${wd.length?`<div class="history-item-details">${wd.length} item(s) with details</div>`:''}`;
+        d.addEventListener('click',()=>loadHistoryItem(item));
+        hl.appendChild(d);
+    });
+}
+
+function loadHistoryItem(item){
+    priceInput.value=item.inputValues; rowData.clear();
+    (item.rowData||[]).forEach((d,i)=>rowData.set(i,{name:d.name||'',group:d.group||'',qty:d.qty||''}));
+    const r=document.querySelector(`input[name="baseType"][value="${item.baseType}"]`);
+    if(r){r.checked=true;document.querySelectorAll('.radio-option').forEach(o=>o.classList.remove('active'));r.closest('.radio-option').classList.add('active');}
+    if(item.rules){
+        if(item.rules.purchase){document.getElementById('purchaseOpType').value=item.rules.purchase.opType||'multiply';document.getElementById('purchaseValue').value=item.rules.purchase.value||1;}
+        if(item.rules.sale){document.getElementById('saleOpType').value=item.rules.sale.opType||'multiply';document.getElementById('saleValue').value=item.rules.sale.value||1.25;document.getElementById('saleLink').value=item.rules.sale.link||'purchase';}
+        if(item.rules.mrp){document.getElementById('mrpOpType').value=item.rules.mrp.opType||'multiply';document.getElementById('mrpValue').value=item.rules.mrp.value||2;document.getElementById('mrpLink').value=item.rules.mrp.link||'sale';}
+    }
+    updateResults(); document.getElementById('historySection').style.display='none'; showNotif('↶ History loaded');
+}
+
+function saveToHistory(){
+    const val=priceInput.value.trim(); if(!val)return;
+    const rd=[]; rowData.forEach((d,i)=>rd[i]={name:d.name||'',group:d.group||'',qty:d.qty||''});
+    const item={
+        timestamp:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
+        date:new Date().toLocaleDateString(), inputValues:val,
+        baseType:document.querySelector('input[name="baseType"]:checked').value, rowData:rd,
+        rules:{
+            purchase:{opType:document.getElementById('purchaseOpType').value,value:document.getElementById('purchaseValue').value},
+            sale:{opType:document.getElementById('saleOpType').value,value:document.getElementById('saleValue').value,link:document.getElementById('saleLink').value},
+            mrp:{opType:document.getElementById('mrpOpType').value,value:document.getElementById('mrpValue').value,link:document.getElementById('mrpLink').value}
+        }
+    };
+    calcHistory=calcHistory.filter(h=>h.inputValues!==item.inputValues);
+    calcHistory.push(item); if(calcHistory.length>50)calcHistory=calcHistory.slice(-50);
+    localStorage.setItem('srFashionHistory',JSON.stringify(calcHistory)); loadHistory();
+}
+
+function clearAllHistory(){
+    if(confirm('Clear all history?')){calcHistory=[];localStorage.removeItem('srFashionHistory');loadHistory();showNotif('🗑️ History cleared');}
+}
+
+let draggedColumn=null;
+function setupDragEvents(){
+    document.querySelectorAll('th.draggable').forEach(th=>{
+        th.draggable=true;
+        th.addEventListener('dragstart',e=>{draggedColumn=th;th.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
+        th.addEventListener('dragend',()=>{th.classList.remove('dragging');document.querySelectorAll('th').forEach(h=>h.classList.remove('drag-over'));});
+        th.addEventListener('dragover',e=>{e.preventDefault();if(th!==draggedColumn&&th.classList.contains('draggable'))th.classList.add('drag-over');});
+        th.addEventListener('dragleave',()=>th.classList.remove('drag-over'));
+        th.addEventListener('drop',e=>{
+            e.preventDefault();
+            if(th!==draggedColumn&&th.classList.contains('draggable')){
+                const di=columnOrder.indexOf(draggedColumn.dataset.column),ti=columnOrder.indexOf(th.dataset.column);
+                columnOrder.splice(di,1);columnOrder.splice(ti,0,draggedColumn.dataset.column);reorderColumns();
             }
+            th.classList.remove('drag-over');
         });
+    });
+}
+function reorderColumns(){
+    const ph=document.getElementById('priceHeader'); ph.innerHTML='';
+    columnOrder.forEach(col=>{
+        const th=document.createElement('th'); th.className='draggable'; th.dataset.column=col; th.style.width='33.33%';
+        th.textContent=col==='purchase'?'PURC':col==='sale'?'SALE':'MRP'; ph.appendChild(th);
+    });
+    setupDragEvents(); updateResults();
+}
 
-        function init() {
-            loadHistory();
-            setupEventListeners();
-        }
+function applyOp(b,op,v){v=parseFloat(v);if(op==='multiply')return b*v;if(op==='percentage')return b*(1+v/100);if(op==='absolute')return b+v;return b;}
+function revOp(r,op,v){v=parseFloat(v);if(op==='multiply')return r/v;if(op==='percentage')return r/(1+v/100);if(op==='absolute')return r-v;return r;}
+function r10(n){const l=n%10;return l<=5?Math.floor(n/10)*10:Math.ceil(n/10)*10;}
 
-        function setupEventListeners() {
-            clearInputBtn.addEventListener('click', clearAllInput);
-            historyBtn.addEventListener('click', toggleHistory);
-            clearHistoryBtn.addEventListener('click', clearAllHistory);
-            exportBtn.addEventListener('click', () => exportModal.style.display = 'block');
-            copyBtn.addEventListener('click', copyData);
-            whatsappBtn.addEventListener('click', shareToWhatsApp);
+function calcPrices(base,baseType){
+    const pOp=document.getElementById('purchaseOpType').value,pV=document.getElementById('purchaseValue').value;
+    const sOp=document.getElementById('saleOpType').value,sV=document.getElementById('saleValue').value,sLk=document.getElementById('saleLink').value;
+    const mOp=document.getElementById('mrpOpType').value,mV=document.getElementById('mrpValue').value,mLk=document.getElementById('mrpLink').value;
+    let purchase,sale,mrp,as;
+    if(baseType==='purchase'){
+        purchase=applyOp(base,pOp,pV);as=applyOp(purchase,sOp,sV);sale=r10(as);
+        mrp=mLk==='sale'?applyOp(as,mOp,mV):applyOp(purchase,mOp,mV);
+    }else{
+        mrp=base;
+        if(mLk==='sale'){as=revOp(mrp,mOp,mV);sale=r10(as);purchase=revOp(revOp(as,sOp,sV),pOp,pV);}
+        else{const bp=revOp(mrp,mOp,mV);purchase=revOp(bp,pOp,pV);as=applyOp(bp,sOp,sV);sale=r10(as);}
+    }
+    return{purchase,sale,mrp};
+}
 
-            document.querySelector('.close').addEventListener('click', () => {
-                exportModal.style.display = 'none';
-            });
+function fmt(v){return'₹'+v.toFixed(2);}
+function fmtP(v){return v.toFixed(2);}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-            window.addEventListener('click', (e) => {
-                if (e.target === exportModal) {
-                    exportModal.style.display = 'none';
-                }
-            });
+function parseValues(){
+    return priceInput.value.trim().split(/[,\s]+/).map(v=>v.trim()).filter(Boolean).map(Number).filter(v=>!isNaN(v));
+}
 
-            document.querySelectorAll('.collapsible-header').forEach(header => {
-                header.addEventListener('click', () => {
-                    const section = header.parentElement;
-                    section.classList.toggle('open');
-                });
-            });
+function updateResults(){
+    const values=parseValues();
+    if(!values.length){
+        document.getElementById('resultsBody').innerHTML=`<tr><td colspan="3" class="empty-state">Enter values above to see calculations</td></tr>`;
+        document.getElementById('actionButtons').style.display='none'; return;
+    }
+    saveToHistory();
+    const baseType=document.querySelector('input[name="baseType"]:checked').value;
+    const useNum=autoNumTog.checked;
+    let html='';
+    values.forEach((val,i)=>{
+        const prices=calcPrices(val,baseType), done=completedRows.has(i);
+        if(!rowData.has(i))rowData.set(i,{name:'',group:'',qty:''});
+        const d=rowData.get(i), pair=`pair-${(i%3)+1}`, n=i+1;
+        const dispName=useNum&&d.name?`${n} ${d.name}`:d.name;
+        const ph=useNum?`${n}. Product Name`:'Product Name';
+        const groupHint=expandGroup(d.group);
+        html+=`
+        <tr class="info-row ${pair}${done?' completed':''}">
+            <td style="width:45%" onclick="event.stopPropagation()">
+                <input class="editable-field" placeholder="${ph}" value="${esc(dispName)}"
+                    onchange="saveNameField(${i},this.value,${n})" onclick="event.stopPropagation()">
+            </td>
+            <td style="width:25%" onclick="event.stopPropagation()" title="${esc(groupHint)}">
+                <input class="editable-field" placeholder="e.g. P, S, CC" value="${esc(d.group)}"
+                    onchange="saveField(${i},'group',this.value)" onclick="event.stopPropagation()">
+            </td>
+            <td style="width:30%" onclick="event.stopPropagation()">
+                <input class="editable-field" placeholder="Qty" value="${esc(d.qty)}"
+                    onchange="saveField(${i},'qty',this.value)" onclick="event.stopPropagation()">
+            </td>
+        </tr>
+        <tr class="values-row ${pair}${done?' completed':''}">`;
+        columnOrder.forEach(col=>{html+=`<td class="price-cell" style="width:33.33%" onclick="toggleDone(${i})">${fmt(prices[col])}</td>`;});
+        html+=`</tr>`;
+    });
+    document.getElementById('resultsBody').innerHTML=html;
+    document.getElementById('actionButtons').style.display='flex';
+    setTimeout(setupDragEvents,0);
+}
 
-            document.querySelectorAll('.radio-option').forEach(option => {
-                option.addEventListener('click', () => {
-                    document.querySelectorAll('.radio-option').forEach(o => o.classList.remove('active'));
-                    option.classList.add('active');
-                    option.querySelector('input').checked = true;
-                    updateResults();
-                });
-            });
+function saveField(i,field,val){if(!rowData.has(i))rowData.set(i,{name:'',group:'',qty:''});rowData.get(i)[field]=val;saveToHistory();}
+function saveNameField(i,val,n){
+    if(!rowData.has(i))rowData.set(i,{name:'',group:'',qty:''});
+    let c=val; const p1=`${n} `,p2=`${n}. `;
+    if(c.startsWith(p2))c=c.slice(p2.length); else if(c.startsWith(p1))c=c.slice(p1.length);
+    rowData.get(i).name=c.trim(); saveToHistory();
+}
+function toggleDone(i){completedRows.has(i)?completedRows.delete(i):completedRows.add(i);updateResults();}
 
-            const purchaseOpType = document.getElementById('purchaseOpType');
-            const purchaseValue = document.getElementById('purchaseValue');
-            const saleOpType = document.getElementById('saleOpType');
-            const saleValue = document.getElementById('saleValue');
-            const saleLink = document.getElementById('saleLink');
-            const mrpOpType = document.getElementById('mrpOpType');
-            const mrpValue = document.getElementById('mrpValue');
-            const mrpLink = document.getElementById('mrpLink');
+function getFields(){
+    return{name:document.getElementById('exportName').checked,group:document.getElementById('exportGroup').checked,sale:document.getElementById('exportSale').checked,purchase:document.getElementById('exportPurchase').checked,mrp:document.getElementById('exportMrp').checked,qty:document.getElementById('exportQty').checked};
+}
 
-            [purchaseOpType, purchaseValue, saleOpType, saleValue, saleLink, mrpOpType, mrpValue, mrpLink].forEach(element => {
-                element.addEventListener('change', updateResults);
-                element.addEventListener('input', updateResults);
-            });
+function buildRows(){
+    const values=parseValues(), base=document.querySelector('input[name="baseType"]:checked').value, useNum=autoNumTog.checked;
+    return values.map((v,i)=>{
+        const prices=calcPrices(v,base), d=rowData.get(i)||{name:'',group:'',qty:''}, n=i+1;
+        const nameClean=(d.name||'').toUpperCase();
+        const nameExport=useNum?(nameClean?`${n} ${nameClean}`:`${n}`):(nameClean||'');
+        return{name:nameExport, group:expandGroup(d.group), qty:(d.qty||'').toUpperCase(), sale:prices.sale, purchase:prices.purchase, mrp:prices.mrp};
+    });
+}
 
-            priceInput.addEventListener('input', updateResults);
-        }
+function buildMatrix(rows,f){
+    const h=[],data=[];
+    if(f.name)h.push('ITEM NAME'); if(f.group)h.push('ITEM GROUP');
+    if(f.sale)h.push('SALE PRICE'); if(f.purchase)h.push('PURCHASE PRICE'); if(f.mrp)h.push('MRP');
+    if(f.qty)h.push('QUANTITY');
+    rows.forEach(r=>{const row=[];
+        if(f.name)row.push(r.name||''); if(f.group)row.push(r.group||'');
+        if(f.sale)row.push(fmtP(r.sale)); if(f.purchase)row.push(fmtP(r.purchase)); if(f.mrp)row.push(fmtP(r.mrp));
+        if(f.qty)row.push(r.qty||''); data.push(row);
+    });
+    return{headers:h,data};
+}
 
-        function clearAllInput() {
-            priceInput.value = '';
-            rowData.clear();
-            completedRows.clear();
-            updateResults();
-            showNotification('✕ Input cleared');
-        }
+function buildText(rows,f){
+    return rows.map(r=>{const c=[];
+        if(f.name)c.push(r.name||'-'); if(f.group)c.push(r.group||'-');
+        if(f.sale)c.push(fmtP(r.sale)); if(f.purchase)c.push(fmtP(r.purchase)); if(f.mrp)c.push(fmtP(r.mrp));
+        if(f.qty)c.push(r.qty||'-'); return c.join(', ');
+    }).join('\n');
+}
 
-        function toggleHistory() {
-            historySection.style.display = historySection.style.display === 'block' ? 'none' : 'block';
-        }
+function copyData(){
+    const text=buildText(buildRows(),getFields());
+    const ta=document.createElement('textarea'); ta.value=text; ta.style.cssText='position:fixed;opacity:0'; document.body.appendChild(ta);
+    ta.select(); ta.setSelectionRange(0,99999);
+    try{document.execCommand('copy')?showNotif('✓ Copied!'):showNotif('❌ Copy failed');}catch{showNotif('❌ Copy failed');}
+    document.body.removeChild(ta);
+}
+function shareWA(){
+    const text='SR FASHION - Price List\n\n'+buildText(buildRows(),getFields());
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`,'_blank'); showNotif('📱 Opening WhatsApp…');
+}
 
-        function loadHistory() {
-            historyList.innerHTML = '';
-            
-            if (calculationHistory.length === 0) {
-                historyList.innerHTML = '<div class="history-item" style="color: #666; font-style: italic;">No history yet</div>';
-                return;
-            }
-            
-            calculationHistory.slice(-20).reverse().forEach((item, index) => {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                
-                // Create summary of items with data
-                let itemsSummary = '';
-                if (item.rowData && item.rowData.length > 0) {
-                    const itemsWithData = item.rowData.filter(row => row.name || row.group || row.qty);
-                    if (itemsWithData.length > 0) {
-                        itemsSummary = `<div class="history-item-details">${itemsWithData.length} item(s) with details</div>`;
-                    }
-                }
-                
-                historyItem.innerHTML = `
-                    <div class="history-item-header">
-                        <div class="history-item-time">${item.timestamp} - ${item.date}</div>
-                    </div>
-                    <div class="history-item-values">Values: ${item.inputValues}</div>
-                    ${itemsSummary}
-                `;
-                
-                historyItem.addEventListener('click', () => {
-                    loadHistoryItem(item);
-                });
-                historyList.appendChild(historyItem);
-            });
-        }
+function exportData(format){
+    const{headers,data}=buildMatrix(buildRows(),getFields());
+    if(format==='csv')exportCSV(headers,data);
+    if(format==='excel')exportExcel(headers,data);
+    if(format==='pdf')exportPDF(headers,data);
+    document.getElementById('exportModal').style.display='none';
+}
 
-        function loadHistoryItem(item) {
-            priceInput.value = item.inputValues;
-            
-            // Restore row data
-            rowData.clear();
-            if (item.rowData && item.rowData.length > 0) {
-                item.rowData.forEach((data, index) => {
-                    rowData.set(index, {
-                        name: data.name || '',
-                        group: data.group || '',
-                        qty: data.qty || ''
-                    });
-                });
-            }
-            
-            // Restore base type
-            const baseTypeRadio = document.querySelector(`input[name="baseType"][value="${item.baseType}"]`);
-            if (baseTypeRadio) {
-                baseTypeRadio.checked = true;
-                document.querySelectorAll('.radio-option').forEach(o => o.classList.remove('active'));
-                baseTypeRadio.closest('.radio-option').classList.add('active');
-            }
-            
-            // Restore rules if available
-            if (item.rules) {
-                if (item.rules.purchase) {
-                    document.getElementById('purchaseOpType').value = item.rules.purchase.opType || 'multiply';
-                    document.getElementById('purchaseValue').value = item.rules.purchase.value || 0;
-                }
-                if (item.rules.sale) {
-                    document.getElementById('saleOpType').value = item.rules.sale.opType || 'multiply';
-                    document.getElementById('saleValue').value = item.rules.sale.value || 1.25;
-                    document.getElementById('saleLink').value = item.rules.sale.link || 'purchase';
-                }
-                if (item.rules.mrp) {
-                    document.getElementById('mrpOpType').value = item.rules.mrp.opType || 'multiply';
-                    document.getElementById('mrpValue').value = item.rules.mrp.value || 2;
-                    document.getElementById('mrpLink').value = item.rules.mrp.link || 'sale';
-                }
-            }
-            
-            updateResults();
-            historySection.style.display = 'none';
-            showNotification('↶ History loaded with all details');
-        }
+function exportCSV(h,d){
+    let csv=h.join(',')+'\n'; d.forEach(r=>{csv+=r.map(c=>`"${c}"`).join(',')+'\n';});
+    const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}), link=document.createElement('a');
+    link.href=URL.createObjectURL(blob); link.download=`SR_Fashion_${new Date().toISOString().split('T')[0]}.csv`;
+    if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){const fr=new FileReader();fr.onload=e=>{window.location.href=e.target.result;};fr.readAsDataURL(blob);showNotif('📱 Check downloads');}
+    else{document.body.appendChild(link);link.click();document.body.removeChild(link);showNotif('✓ CSV downloaded!');}
+}
+function exportExcel(h,d){
+    const ws=XLSX.utils.aoa_to_sheet([h,...d]),wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,'SR Fashion');
+    XLSX.writeFile(wb,`SR_Fashion_${new Date().toISOString().split('T')[0]}.xlsx`); showNotif('✓ Excel downloaded!');
+}
+function exportPDF(h,d){
+    const{jsPDF}=window.jspdf, doc=new jsPDF();
+    doc.setFontSize(18);doc.text('SR FASHION - Price List',14,15);
+    doc.setFontSize(10);doc.text(`Generated: ${new Date().toLocaleDateString()}`,14,22);
+    doc.autoTable({head:[h],body:d,startY:30,theme:'grid',styles:{fontSize:9,cellPadding:3},headStyles:{fillColor:[212,175,55],textColor:[30,30,30],fontStyle:'bold'},alternateRowStyles:{fillColor:[245,245,245]}});
+    doc.save(`SR_Fashion_${new Date().toISOString().split('T')[0]}.pdf`); showNotif('✓ PDF downloaded!');
+}
 
-        function saveToHistory() {
-            const inputValue = priceInput.value.trim();
-            if (!inputValue) return;
-
-            // Collect all row data
-            const currentRowData = [];
-            rowData.forEach((data, index) => {
-                currentRowData.push({
-                    name: data.name || '',
-                    group: data.group || '',
-                    qty: data.qty || ''
-                });
-            });
-
-            const historyItem = {
-                timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-                date: new Date().toLocaleDateString(),
-                inputValues: inputValue,
-                baseType: document.querySelector('input[name="baseType"]:checked').value,
-                rowData: currentRowData,
-                rules: {
-                    purchase: {
-                        opType: document.getElementById('purchaseOpType').value,
-                        value: document.getElementById('purchaseValue').value
-                    },
-                    sale: {
-                        opType: document.getElementById('saleOpType').value,
-                        value: document.getElementById('saleValue').value,
-                        link: document.getElementById('saleLink').value
-                    },
-                    mrp: {
-                        opType: document.getElementById('mrpOpType').value,
-                        value: document.getElementById('mrpValue').value,
-                        link: document.getElementById('mrpLink').value
-                    }
-                }
-            };
-
-            // Remove duplicates based on input values
-            calculationHistory = calculationHistory.filter(item => 
-                item.inputValues !== historyItem.inputValues
-            );
-
-            calculationHistory.push(historyItem);
-            
-            if (calculationHistory.length > 50) {
-                calculationHistory = calculationHistory.slice(-50);
-            }
-
-            localStorage.setItem('srFashionHistory', JSON.stringify(calculationHistory));
-            loadHistory();
-        }
-
-        function clearAllHistory() {
-            if (confirm('Clear all history?')) {
-                calculationHistory = [];
-                localStorage.removeItem('srFashionHistory');
-                loadHistory();
-                showNotification('🗑️ History cleared');
-            }
-        }
-
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: rgba(212, 175, 55, 0.95);
-                color: #1e1e1e;
-                padding: 15px 25px;
-                border-radius: 8px;
-                font-weight: 700;
-                z-index: 10000;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                font-size: 1.1em;
-            `;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transition = 'opacity 0.3s';
-                notification.style.opacity = '0';
-                setTimeout(() => notification.remove(), 300);
-            }, 2000);
-        }
-
-        let draggedColumn = null;
-
-        function setupDragEvents() {
-            document.querySelectorAll('th.draggable').forEach(th => {
-                th.addEventListener('dragstart', (e) => {
-                    draggedColumn = th;
-                    th.classList.add('dragging');
-                    e.dataTransfer.effectAllowed = 'move';
-                });
-
-                th.addEventListener('dragend', () => {
-                    th.classList.remove('dragging');
-                    document.querySelectorAll('th').forEach(h => h.classList.remove('drag-over'));
-                });
-
-                th.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    e.dataTransfer.dropEffect = 'move';
-                    if (th !== draggedColumn && th.classList.contains('draggable')) {
-                        th.classList.add('drag-over');
-                    }
-                });
-
-                th.addEventListener('dragleave', () => {
-                    th.classList.remove('drag-over');
-                });
-
-                th.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    if (th !== draggedColumn && th.classList.contains('draggable')) {
-                        const draggedCol = draggedColumn.dataset.column;
-                        const targetCol = th.dataset.column;
-                        
-                        const draggedIndex = columnOrder.indexOf(draggedCol);
-                        const targetIndex = columnOrder.indexOf(targetCol);
-                        
-                        columnOrder.splice(draggedIndex, 1);
-                        columnOrder.splice(targetIndex, 0, draggedCol);
-                        
-                        reorderColumns();
-                    }
-                    th.classList.remove('drag-over');
-                });
-            });
-        }
-
-        function reorderColumns() {
-            const priceHeader = document.getElementById('priceHeader');
-            priceHeader.innerHTML = '';
-            
-            columnOrder.forEach(col => {
-                const th = document.createElement('th');
-                th.className = 'draggable';
-                th.draggable = true;
-                th.dataset.column = col;
-                th.style.width = '33.33%';
-                th.textContent = col === 'purchase' ? 'PURC' : 
-                                 col === 'sale' ? 'SALE' : 'MRP';
-                priceHeader.appendChild(th);
-            });
-            
-            setupDragEvents();
-            updateResults();
-        }
-
-        function applyOperation(base, opType, value) {
-            const val = parseFloat(value);
-            switch(opType) {
-                case 'multiply':
-                    return base * val;
-                case 'percentage':
-                    return base * (1 + val / 100);
-                case 'absolute':
-                    return base + val;
-                default:
-                    return base;
-            }
-        }
-
-        function reverseOperation(result, opType, value) {
-            const val = parseFloat(value);
-            switch(opType) {
-                case 'multiply':
-                    return result / val;
-                case 'percentage':
-                    return result / (1 + val / 100);
-                case 'absolute':
-                    return result - val;
-                default:
-                    return result;
-            }
-        }
-
-        function roundToNearest10(value) {
-            const lastDigit = value % 10;
-            if (lastDigit <= 5) {
-                return Math.floor(value / 10) * 10;
-            } else {
-                return Math.ceil(value / 10) * 10;
-            }
-        }
-
-        function calculatePrices(baseValue, baseType) {
-            let purchase, sale, mrp;
-            let actualSale;
-
-            const purchaseOpType = document.getElementById('purchaseOpType').value;
-            const purchaseValue = document.getElementById('purchaseValue').value;
-            const saleOpType = document.getElementById('saleOpType').value;
-            const saleValue = document.getElementById('saleValue').value;
-            const saleLink = document.getElementById('saleLink').value;
-            const mrpOpType = document.getElementById('mrpOpType').value;
-            const mrpValue = document.getElementById('mrpValue').value;
-            const mrpLink = document.getElementById('mrpLink').value;
-
-            if (baseType === 'purchase') {
-                const basePurchase = applyOperation(baseValue, purchaseOpType, purchaseValue);
-                purchase = basePurchase;
-                
-                if (saleLink === 'purchase') {
-                    actualSale = applyOperation(purchase, saleOpType, saleValue);
-                } else {
-                    actualSale = applyOperation(purchase, saleOpType, saleValue);
-                }
-                
-                sale = roundToNearest10(actualSale);
-                
-                if (mrpLink === 'sale') {
-                    mrp = applyOperation(actualSale, mrpOpType, mrpValue);
-                } else {
-                    mrp = applyOperation(purchase, mrpOpType, mrpValue);
-                }
-            } else {
-                mrp = baseValue;
-                
-                if (mrpLink === 'sale') {
-                    actualSale = reverseOperation(mrp, mrpOpType, mrpValue);
-                    sale = roundToNearest10(actualSale);
-                    
-                    if (saleLink === 'purchase') {
-                        purchase = reverseOperation(actualSale, saleOpType, saleValue);
-                        purchase = reverseOperation(purchase, purchaseOpType, purchaseValue);
-                    } else {
-                        purchase = reverseOperation(actualSale, saleOpType, saleValue);
-                        purchase = reverseOperation(purchase, purchaseOpType, purchaseValue);
-                    }
-                } else {
-                    const basePurchase = reverseOperation(mrp, mrpOpType, mrpValue);
-                    purchase = reverseOperation(basePurchase, purchaseOpType, purchaseValue);
-                    
-                    if (saleLink === 'purchase') {
-                        actualSale = applyOperation(basePurchase, saleOpType, saleValue);
-                    } else {
-                        actualSale = applyOperation(basePurchase, saleOpType, saleValue);
-                    }
-                    
-                    sale = roundToNearest10(actualSale);
-                }
-            }
-
-            return { purchase, sale, mrp };
-        }
-
-        function formatCurrency(value) {
-            return '₹' + value.toFixed(2);
-        }
-
-        function formatPrice(value) {
-            return value.toFixed(2);
-        }
-
-        function updateResults() {
-            const inputValue = priceInput.value.trim();
-            
-            if (!inputValue) {
-                resultsBody.innerHTML = `
-                    <tr>
-                        <td colspan="3" class="empty-state">
-                            Enter values above to see calculations
-                        </td>
-                    </tr>
-                `;
-                actionButtons.style.display = 'none';
-                return;
-            }
-
-            const values = inputValue
-                .split(/[,\s]+/)
-                .map(v => v.trim())
-                .filter(v => v !== '')
-                .map(v => parseFloat(v))
-                .filter(v => !isNaN(v));
-
-            if (values.length === 0) {
-                resultsBody.innerHTML = `
-                    <tr>
-                        <td colspan="3" class="empty-state">
-                            Please enter valid numbers
-                        </td>
-                    </tr>
-                `;
-                actionButtons.style.display = 'none';
-                return;
-            }
-
-            saveToHistory();
-
-            const baseType = document.querySelector('input[name="baseType"]:checked').value;
-
-            let html = '';
-            values.forEach((value, index) => {
-                const prices = calculatePrices(value, baseType);
-                const isCompleted = completedRows.has(index);
-                
-                if (!rowData.has(index)) {
-                    rowData.set(index, { name: '', group: '', qty: '' });
-                }
-                const data = rowData.get(index);
-                
-                const pairClass = `pair-${(index % 3) + 1}`;
-                const serialNumber = index + 1;
-                
-                // Get display name with serial number prepended
-                const displayName = data.name ? `${serialNumber} ${data.name}` : '';
-                const placeholderText = `${serialNumber}. Product Name`;
-                
-                html += `
-                    <tr data-index="${index}" class="info-row ${pairClass} ${isCompleted ? 'completed' : ''}">
-                        <td style="width: 50%;" onclick="event.stopPropagation();">
-                            <input type="text" 
-                                   class="editable-field" 
-                                   placeholder="${placeholderText}" 
-                                   value="${displayName}"
-                                   onchange="updateRowDataWithSerial(${index}, 'name', this.value, ${serialNumber})"
-                                   onclick="event.stopPropagation();">
-                        </td>
-                        <td style="width: 25%;" onclick="event.stopPropagation();">
-                            <input type="text" 
-                                   class="editable-field" 
-                                   placeholder="Group" 
-                                   value="${data.group}"
-                                   onchange="updateRowData(${index}, 'group', this.value)"
-                                   onclick="event.stopPropagation();">
-                        </td>
-                        <td style="width: 25%;" onclick="event.stopPropagation();">
-                            <input type="text" 
-                                   class="editable-field" 
-                                   placeholder="Qty" 
-                                   value="${data.qty}"
-                                   onchange="updateRowData(${index}, 'qty', this.value)"
-                                   onclick="event.stopPropagation();">
-                        </td>
-                    </tr>
-                `;
-                
-                html += `
-                    <tr data-index="${index}" class="values-row ${pairClass} ${isCompleted ? 'completed' : ''}">
-                `;
-                
-                columnOrder.forEach(col => {
-                    html += `<td class="price-cell" style="width: 33.33%;" onclick="toggleComplete(${index})">${formatCurrency(prices[col])}</td>`;
-                });
-                
-                html += `</tr>`;
-            });
-
-            resultsBody.innerHTML = html;
-            actionButtons.style.display = 'flex';
-            
-            setTimeout(setupDragEvents, 0);
-        }
-
-        function updateRowData(index, field, value) {
-            if (!rowData.has(index)) {
-                rowData.set(index, { name: '', group: '', qty: '' });
-            }
-            const data = rowData.get(index);
-            data[field] = value;
-            
-            // Save to history when data is updated
-            saveToHistory();
-        }
-
-        function updateRowDataWithSerial(index, field, value, serialNumber) {
-            if (!rowData.has(index)) {
-                rowData.set(index, { name: '', group: '', qty: '' });
-            }
-            const data = rowData.get(index);
-            
-            // Remove serial number prefix if present (e.g., "1 SNT GULAB" -> "SNT GULAB")
-            let cleanValue = value;
-            const serialPrefix = `${serialNumber} `;
-            const serialPrefixAlt = `${serialNumber}. `;
-            
-            if (cleanValue.startsWith(serialPrefix)) {
-                cleanValue = cleanValue.substring(serialPrefix.length);
-            } else if (cleanValue.startsWith(serialPrefixAlt)) {
-                cleanValue = cleanValue.substring(serialPrefixAlt.length);
-            }
-            
-            data[field] = cleanValue.trim();
-            
-            // Save to history when data is updated
-            saveToHistory();
-        }
-
-        function toggleComplete(index) {
-            if (completedRows.has(index)) {
-                completedRows.delete(index);
-            } else {
-                completedRows.add(index);
-            }
-            updateResults();
-        }
-
-        function getAllRowsData() {
-            const inputValue = priceInput.value.trim();
-            const values = inputValue
-                .split(/[,\s]+/)
-                .map(v => v.trim())
-                .filter(v => v !== '')
-                .map(v => parseFloat(v))
-                .filter(v => !isNaN(v));
-            
-            const baseType = document.querySelector('input[name="baseType"]:checked').value;
-            
-            return values.map((value, index) => {
-                const prices = calculatePrices(value, baseType);
-                const data = rowData.get(index) || { name: '', group: '', qty: '' };
-                
-                const groupCode = (data.group || '').toUpperCase().trim();
-                const groupPrintName = groupMapping[groupCode] || groupCode || '';
-                
-                const serialNumber = index + 1;
-                // Prepend serial number to name for export
-                const nameWithSerial = data.name ? `${serialNumber} ${data.name.toUpperCase()}` : `${serialNumber}`;
-                
-                return { 
-                    serial: serialNumber,
-                    name: nameWithSerial,
-                    nameOnly: (data.name || '').toUpperCase(),
-                    group: (data.group || '').toUpperCase(),
-                    groupPrintName: groupPrintName,
-                    qty: (data.qty || '').toUpperCase(),
-                    purchase: prices.purchase,
-                    sale: prices.sale,
-                    mrp: prices.mrp
-                };
-            });
-        }
-
-        function getSelectedFields() {
-            return {
-                name: document.getElementById('exportName').checked,
-                group: document.getElementById('exportGroup').checked,
-                groupPrintName: document.getElementById('exportGroupPrint').checked,
-                qty: document.getElementById('exportQty').checked,
-                sale: document.getElementById('exportSale').checked,
-                purchase: document.getElementById('exportPurchase').checked,
-                mrp: document.getElementById('exportMrp').checked
-            };
-        }
-
-        function copyData() {
-            const allData = getAllRowsData();
-            const fields = getSelectedFields();
-            
-            let copyText = '';
-            
-            allData.forEach(row => {
-                let rowText = [];
-                if (fields.name) rowText.push(row.name || '-');
-                if (fields.groupPrintName) rowText.push(row.groupPrintName || '-');
-                if (fields.group) rowText.push(row.group || '-');
-                if (fields.qty) rowText.push(row.qty || '-');
-                if (fields.sale) rowText.push(formatPrice(row.sale));
-                if (fields.purchase) rowText.push(formatPrice(row.purchase));
-                if (fields.mrp) rowText.push(formatPrice(row.mrp));
-                
-                copyText += rowText.join(', ') + '\n';
-            });
-            
-            copyToClipboard(copyText);
-        }
-
-        function copyToClipboard(text) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed';
-            textarea.style.opacity = '0';
-            
-            document.body.appendChild(textarea);
-            textarea.select();
-            textarea.setSelectionRange(0, 99999);
-            
-            try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    showNotification('✓ Copied to clipboard!');
-                } else {
-                    showNotification('❌ Copy failed');
-                }
-            } catch (err) {
-                showNotification('❌ Copy failed - please try again');
-            }
-            
-            document.body.removeChild(textarea);
-        }
-
-        function shareToWhatsApp() {
-            const allData = getAllRowsData();
-            const fields = getSelectedFields();
-            
-            let whatsappText = 'SR FASHION - Price List\n\n';
-            
-            allData.forEach((row) => {
-                let rowText = [];
-                if (fields.name) rowText.push(row.name || '-');
-                if (fields.groupPrintName) rowText.push(row.groupPrintName || '-');
-                if (fields.group) rowText.push(row.group || '-');
-                if (fields.qty) rowText.push(row.qty || '-');
-                if (fields.sale) rowText.push(formatPrice(row.sale));
-                if (fields.purchase) rowText.push(formatPrice(row.purchase));
-                if (fields.mrp) rowText.push(formatPrice(row.mrp));
-                
-                whatsappText += rowText.join(', ') + '\n';
-            });
-            
-            const encodedText = encodeURIComponent(whatsappText);
-            const whatsappUrl = `https://wa.me/?text=${encodedText}`;
-            
-            window.open(whatsappUrl, '_blank');
-            showNotification('📱 Opening WhatsApp...');
-        }
-
-        function exportData(format) {
-            const allData = getAllRowsData();
-            const fields = getSelectedFields();
-            
-            const headers = [];
-            if (fields.name) headers.push('ITEM NAME');
-            if (fields.groupPrintName) headers.push('ITEM PRINT NAME');
-            if (fields.group) headers.push('ITEM GROUP');
-            if (fields.qty) headers.push('QUANTITY');
-            if (fields.sale) headers.push('SALE PRICE');
-            if (fields.purchase) headers.push('PURCHASE PRICE');
-            if (fields.mrp) headers.push('MRP');
-            
-            const data = allData.map(row => {
-                const rowData = [];
-                if (fields.name) rowData.push(row.name || '');
-                if (fields.groupPrintName) rowData.push(row.groupPrintName || '');
-                if (fields.group) rowData.push(row.group || '');
-                if (fields.qty) rowData.push(row.qty || '');
-                if (fields.sale) rowData.push(formatPrice(row.sale));
-                if (fields.purchase) rowData.push(formatPrice(row.purchase));
-                if (fields.mrp) rowData.push(formatPrice(row.mrp));
-                return rowData;
-            });
-
-            if (format === 'csv') {
-                exportCSV(headers, data);
-            } else if (format === 'excel') {
-                exportExcel(headers, data);
-            } else if (format === 'pdf') {
-                exportPDF(headers, data);
-            }
-
-            exportModal.style.display = 'none';
-        }
-
-        function exportCSV(headers, data) {
-            let csv = headers.join(',') + '\n';
-            
-            data.forEach(row => {
-                csv += row.map(cell => `"${cell}"`).join(',') + '\n';
-            });
-            
-            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `SR_Fashion_${new Date().toISOString().split('T')[0]}.csv`;
-            
-            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    window.location.href = e.target.result;
-                };
-                reader.readAsDataURL(blob);
-                showNotification('📱 Check downloads for CSV file');
-            } else {
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                showNotification('✓ CSV file downloaded!');
-            }
-        }
-
-        function exportExcel(headers, data) {
-            const ws_data = [headers, ...data];
-            const ws = XLSX.utils.aoa_to_sheet(ws_data);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "SR Fashion");
-            
-            XLSX.writeFile(wb, `SR_Fashion_${new Date().toISOString().split('T')[0]}.xlsx`);
-            showNotification('✓ Excel file downloaded!');
-        }
-
-        function exportPDF(headers, data) {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            doc.setFontSize(18);
-            doc.text('SR FASHION - Price List', 14, 15);
-            
-            doc.setFontSize(10);
-            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 22);
-            
-            doc.autoTable({
-                head: [headers],
-                body: data,
-                startY: 30,
-                theme: 'grid',
-                styles: {
-                    fontSize: 9,
-                    cellPadding: 3,
-                },
-                headStyles: {
-                    fillColor: [212, 175, 55],
-                    textColor: [30, 30, 30],
-                    fontStyle: 'bold',
-                },
-                alternateRowStyles: {
-                    fillColor: [245, 245, 245],
-                },
-            });
-            
-            doc.save(`SR_Fashion_${new Date().toISOString().split('T')[0]}.pdf`);
-            showNotification('✓ PDF file downloaded!');
-        }
-
-        setupDragEvents();
-        init();
-    </script>
+setupDragEvents();
+init();
+</script>
 </body>
 </html>
