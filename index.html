@@ -1,660 +1,191 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SR FASHION - Pricing Calculator</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #1a1a1a 0%, #2d2416 100%); min-height: 100vh; padding: 15px; }
-        .container { max-width: 100%; margin: 0 auto; background: #1e1e1e; border-radius: 15px; box-shadow: 0 10px 40px rgba(212,175,55,0.3); padding: 20px; border: 2px solid #d4af37; }
-        h1 { color: #d4af37; text-align: center; margin-bottom: 20px; font-size: 2.2em; text-shadow: 0 0 20px rgba(212,175,55,0.5); letter-spacing: 3px; font-weight: 700; }
-        .base-selector { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        .radio-option { background: linear-gradient(135deg, #2a2a2a, #1e1e1e); padding: 12px 24px; border-radius: 10px; border: 2px solid #444; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
-        .radio-option:hover { border-color: #d4af37; background: linear-gradient(135deg, #333, #2a2a2a); transform: translateY(-2px); }
-        .radio-option.active { border-color: #d4af37; background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.1)); box-shadow: 0 0 15px rgba(212,175,55,0.3); }
-        .radio-option input[type="radio"] { accent-color: #d4af37; }
-        .radio-option span { color: #d4af37; font-weight: 700; font-size: 1em; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SR FASHION - Pricing Calculator</title>
 
-        .input-section { margin-bottom: 15px; position: relative; }
-        .input-section input { width: 100%; padding: 15px 50px 15px 15px; border: 2px solid #444; border-radius: 10px; font-size: 1.1em; background: #2a2a2a; color: #d4af37; transition: all 0.3s; font-weight: 600; }
-        .input-section input:focus { outline: none; border-color: #d4af37; box-shadow: 0 0 20px rgba(212,175,55,0.4); }
-        .input-section input::placeholder { color: #666; }
-        .clear-input-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(212,175,55,0.3); border: 2px solid #d4af37; color: #d4af37; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2em; font-weight: bold; transition: all 0.3s; }
-        .clear-input-btn:hover { background: rgba(212,175,55,0.5); transform: translateY(-50%) scale(1.1); }
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
 
-        .toggle-row { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; background: linear-gradient(135deg, #2a2a2a, #1e1e1e); border: 2px solid #444; border-radius: 10px; padding: 12px 16px; flex-wrap: wrap; }
-        .toggle-label { color: #d4af37; font-weight: 700; font-size: 0.95em; }
-        .toggle-switch { position: relative; width: 50px; height: 26px; flex-shrink: 0; }
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: 0.3s; border-radius: 26px; }
-        .toggle-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: #888; transition: 0.3s; border-radius: 50%; }
-        .toggle-switch input:checked + .toggle-slider { background-color: rgba(212,175,55,0.4); border: 1px solid #d4af37; }
-        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(24px); background-color: #d4af37; }
-        .toggle-hint { color: #888; font-size: 0.8em; font-style: italic; }
+body{
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#1a1a1a,#2d2416);
+    padding:15px;
+    overflow-x:hidden;
+}
 
-        /* GST display row */
-        .gst-info-row { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05)); border: 2px solid #d4af37; border-radius: 10px; padding: 10px 16px; flex-wrap: wrap; }
-        .gst-badge { background: rgba(212,175,55,0.2); border: 1px solid #d4af37; border-radius: 6px; padding: 4px 10px; color: #d4af37; font-weight: 700; font-size: 0.9em; }
-        .gst-label { color: #d4af37; font-weight: 600; font-size: 0.9em; }
-        .gst-sep { color: #555; }
+.container{
+    width:100%;
+    max-width:100%;
+    background:#1e1e1e;
+    border-radius:15px;
+    padding:20px;
+    border:2px solid #d4af37;
+}
 
-        .collapsible-section { background: linear-gradient(135deg, #2a2a2a, #1e1e1e); border: 2px solid #444; border-radius: 10px; margin-bottom: 15px; overflow: hidden; }
-        .collapsible-header { padding: 14px 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: rgba(212,175,55,0.15); border-bottom: 2px solid #444; transition: background 0.3s; }
-        .collapsible-header:hover { background: rgba(212,175,55,0.25); }
-        .collapsible-header h3 { color: #d4af37; font-size: 1.1em; font-weight: 700; }
-        .collapsible-arrow { color: #d4af37; font-size: 1.3em; transition: transform 0.3s; font-weight: bold; }
-        .collapsible-section.open .collapsible-arrow { transform: rotate(180deg); }
-        .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-        .collapsible-section.open .collapsible-content { max-height: 500px; }
-        .rule-items-compact { padding: 12px 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; align-items: center; }
-        .rule-items-compact select, .rule-items-compact input { padding: 10px; border: 1px solid #444; border-radius: 6px; font-size: 0.95em; background: #1e1e1e; color: #d4af37; font-weight: 600; }
-        .rule-note { grid-column: 1 / -1; color: #d4af37; font-size: 0.85em; padding: 5px; text-align: center; }
-        .rule-items-compact select:focus, .rule-items-compact input:focus { outline: none; border-color: #d4af37; }
+h1{
+    color:#d4af37;
+    text-align:center;
+    margin-bottom:15px;
+}
 
-        .results-section { margin-top: 20px; }
-        .table-wrapper { overflow-x: auto; border-radius: 10px; border: 2px solid #444; margin-bottom: 20px; }
-        .results-table { width: 100%; border-collapse: collapse; background: #2a2a2a; table-layout: fixed; }
-        .results-table .info-header-row th { border-bottom: 1px solid #555; }
-        .results-table .price-header-row th { border-bottom: 2px solid #444; }
-        .results-table thead { background: linear-gradient(135deg, rgba(212,175,55,0.3), rgba(212,175,55,0.2)); }
-        .results-table th { padding: 12px 8px; text-align: center; font-weight: 700; color: #d4af37; font-size: 1em; word-wrap: break-word; }
-        .results-table th.draggable { cursor: move; user-select: none; position: relative; }
-        .results-table th.draggable::before { content: '⋮⋮'; position: absolute; left: 3px; color: #666; font-size: 0.8em; }
-        .results-table th.dragging { opacity: 0.5; background: rgba(212,175,55,0.3); }
-        .results-table th.drag-over { background: rgba(212,175,55,0.4); }
-        .results-table tbody tr { background: #2a2a2a; }
-        .results-table tbody tr.values-row { border-bottom: 3px solid #1e1e1e; }
-        .results-table tbody tr.pair-1 { background: linear-gradient(135deg, rgba(139,69,19,0.2), rgba(139,69,19,0.15)); }
-        .results-table tbody tr.pair-2 { background: linear-gradient(135deg, rgba(25,25,112,0.2), rgba(25,25,112,0.15)); }
-        .results-table tbody tr.pair-3 { background: linear-gradient(135deg, rgba(85,107,47,0.2), rgba(85,107,47,0.15)); }
-        .results-table tbody tr:hover { filter: brightness(1.15); }
-        .results-table tbody tr.completed { opacity: 0.4; }
-        .results-table tbody tr.completed td { text-decoration: line-through; }
-        .results-table td { padding: 10px 8px; color: #d4af37; transition: all 0.3s; font-weight: 700; word-wrap: break-word; overflow-wrap: break-word; }
-        .editable-field { background: transparent; border: 1px solid transparent; color: #d4af37; padding: 6px 8px; border-radius: 4px; width: 100%; font-size: 1em; transition: all 0.2s; font-weight: 700; }
-        .editable-field:focus { outline: none; border-color: #d4af37; background: rgba(212,175,55,0.1); }
-        .editable-field::placeholder { color: #555; }
-        .price-cell { font-family: 'Courier New', monospace; cursor: pointer; padding: 12px 8px !important; font-weight: 900 !important; font-size: 1.2em !important; letter-spacing: 1px; text-align: center !important; white-space: nowrap !important; text-shadow: 0 0 8px rgba(212,175,55,0.4); line-height: 1.2 !important; }
-        .gst-tag { display: inline-block; font-size: 0.62em; background: rgba(212,175,55,0.25); border: 1px solid #d4af37; border-radius: 3px; padding: 1px 4px; margin-left: 4px; vertical-align: middle; font-weight: 700; letter-spacing: 0; }
-        .empty-state { text-align: center; padding: 40px; color: #666; font-style: italic; font-size: 1.1em; }
+.input-section input{
+    width:100%;
+    padding:14px;
+    border-radius:8px;
+    border:2px solid #444;
+    background:#2a2a2a;
+    color:#d4af37;
+}
 
-        .action-buttons { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
-        .main-action-btn { background: linear-gradient(135deg, rgba(212,175,55,0.3), rgba(212,175,55,0.2)); border: 3px solid #d4af37; color: #d4af37; padding: 12px 20px; border-radius: 12px; cursor: pointer; font-size: 1em; font-weight: 700; transition: all 0.3s; box-shadow: 0 4px 15px rgba(212,175,55,0.2); min-width: 120px; text-align: center; }
-        .main-action-btn:hover { background: linear-gradient(135deg, rgba(212,175,55,0.4), rgba(212,175,55,0.3)); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(212,175,55,0.4); }
-        .main-action-btn:active { transform: translateY(0); }
-        .whatsapp-btn { background: linear-gradient(135deg, rgba(37,211,102,0.3), rgba(37,211,102,0.2)); border: 3px solid #25D366; color: #25D366; }
-        .whatsapp-btn:hover { background: linear-gradient(135deg, rgba(37,211,102,0.4), rgba(37,211,102,0.3)); }
+.toggle-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:10px;
+    margin-bottom:10px;
+}
 
-        .history-section { margin-top: 20px; background: linear-gradient(135deg, #2a2a2a, #1e1e1e); border: 2px solid #444; border-radius: 10px; padding: 15px; display: none; }
-        .history-section h3 { color: #d4af37; margin-bottom: 10px; font-size: 1.1em; display: flex; justify-content: space-between; align-items: center; }
-        .history-list { max-height: 300px; overflow-y: auto; }
-        .history-item { padding: 12px; border-bottom: 1px solid #444; color: #d4af37; font-weight: 600; cursor: pointer; transition: all 0.2s; border-radius: 5px; margin-bottom: 5px; }
-        .history-item:hover { background: rgba(212,175,55,0.1); }
-        .history-item:last-child { border-bottom: none; }
-        .history-item-time { font-size: 0.9em; color: #d4af37; margin-bottom: 4px; }
-        .history-item-values { font-size: 0.85em; color: #aaa; margin-bottom: 3px; }
-        .history-item-details { font-size: 0.8em; color: #888; font-style: italic; }
-        .clear-history-btn { background: rgba(212,175,55,0.2); border: 2px solid #d4af37; color: #d4af37; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.9em; font-weight: 700; transition: all 0.3s; }
-        .clear-history-btn:hover { background: rgba(212,175,55,0.4); }
+.toggle-switch{
+    position:relative;
+    width:50px;height:25px;
+}
+.toggle-switch input{display:none;}
+.slider{
+    position:absolute;
+    background:#444;
+    border-radius:25px;
+    top:0;left:0;right:0;bottom:0;
+}
+.slider:before{
+    content:"";
+    position:absolute;
+    height:18px;width:18px;
+    left:4px;top:3px;
+    background:#999;
+    border-radius:50%;
+    transition:0.3s;
+}
+input:checked + .slider{
+    background:#d4af37;
+}
+input:checked + .slider:before{
+    transform:translateX(24px);
+    background:#fff;
+}
 
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(4px); overflow-y: auto; padding: 30px 15px; }
-        .modal-content { background: linear-gradient(135deg, #2a2a2a, #1e1e1e); margin: 0 auto; padding: 24px 20px 20px; border: 3px solid #d4af37; border-radius: 15px; width: 100%; max-width: 440px; box-shadow: 0 10px 40px rgba(212,175,55,0.5); position: relative; }
-        .modal-header { color: #d4af37; font-size: 1.3em; font-weight: 700; margin-bottom: 18px; text-align: center; padding-right: 28px; }
-        .close { color: #d4af37; position: absolute; top: 14px; right: 16px; font-size: 26px; font-weight: bold; cursor: pointer; line-height: 1; transition: color 0.3s; }
-        .close:hover { color: #fff; }
-        .checkbox-group { margin: 12px 0; }
-        .checkbox-item { background: rgba(212,175,55,0.1); border: 2px solid #444; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; display: flex; align-items: center; cursor: pointer; transition: all 0.3s; }
-        .checkbox-item:hover { border-color: #d4af37; background: rgba(212,175,55,0.2); }
-        .checkbox-item input[type="checkbox"] { width: 18px; height: 18px; margin-right: 12px; cursor: pointer; accent-color: #d4af37; flex-shrink: 0; }
-        .checkbox-item label { color: #d4af37; font-weight: 600; font-size: 0.95em; cursor: pointer; flex: 1; }
-        .format-buttons { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; justify-content: center; }
-        .format-btn { background: linear-gradient(135deg, rgba(212,175,55,0.3), rgba(212,175,55,0.2)); border: 2px solid #d4af37; color: #d4af37; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 700; transition: all 0.3s; flex: 1; min-width: 80px; }
-        .format-btn:hover { background: linear-gradient(135deg, rgba(212,175,55,0.4), rgba(212,175,55,0.3)); transform: translateY(-2px); }
+/* TABLE FIX */
+.table-wrapper{
+    overflow:hidden;
+    border:2px solid #444;
+    border-radius:10px;
+}
 
-        @media (max-width: 768px) {
-            .container { padding: 12px; } h1 { font-size: 1.6em; letter-spacing: 2px; }
-            .results-table th, .results-table td { padding: 8px 4px !important; font-size: 0.9em; }
-            .price-cell { font-size: 1em !important; }
-            .editable-field { font-size: 0.85em; padding: 4px 6px; }
-            .main-action-btn { padding: 11px 14px; font-size: 0.9em; min-width: 100px; }
-        }
-        @media (max-width: 480px) {
-            .main-action-btn { flex: 1; min-width: calc(50% - 8px); font-size: 0.88em; padding: 10px 10px; }
-            .price-cell { font-size: 1em !important; }
-        }
-    </style>
+table{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+}
+
+th,td{
+    padding:8px 6px;
+    text-align:center;
+    color:#d4af37;
+    font-weight:bold;
+    word-wrap:break-word;
+    white-space:normal;
+}
+
+thead{
+    background:rgba(212,175,55,0.2);
+}
+
+.price{
+    font-size:1.1em;
+}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+    th,td{font-size:12px;}
+}
+</style>
+
 </head>
+
 <body>
+
 <div class="container">
-    <h1>SR FASHION</h1>
+<h1>SR FASHION</h1>
 
-    <div class="base-selector">
-        <label class="radio-option active" data-value="purchase">
-            <input type="radio" name="baseType" value="purchase" checked><span>Purchase Price</span>
-        </label>
-        <label class="radio-option" data-value="mrp">
-            <input type="radio" name="baseType" value="mrp"><span>MRP</span>
-        </label>
-    </div>
-
-    <div class="input-section">
-        <input type="text" id="priceInput" inputmode="decimal" pattern="[0-9.,\s]*" placeholder="Enter values (e.g., 1150 2000 3500)">
-        <div class="clear-input-btn" id="clearInputBtn" title="Clear input">✕</div>
-    </div>
-
-    <div class="gst-info-row">
-        <span style="color:#d4af37;font-weight:700;font-size:0.95em;">🧾 GST (auto on purchase):</span>
-        <span class="gst-badge">5% if ≤ ₹2500</span>
-        <span class="gst-sep">|</span>
-        <span class="gst-badge">18% if &gt; ₹2500</span>
-        <span class="gst-label" style="margin-left:auto;font-size:0.8em;color:#888;">Applied to Purchase Price only</span>
-    </div>
-
-    <div class="toggle-row">
-        <span class="toggle-label">🔢 Auto-Number Names</span>
-        <label class="toggle-switch">
-            <input type="checkbox" id="autoNumberToggle" checked>
-            <span class="toggle-slider"></span>
-        </label>
-        <span class="toggle-hint">Prefix names with 1, 2, 3… in table &amp; export</span>
-    </div>
-
-    <div class="collapsible-section">
-        <div class="collapsible-header"><h3>💰 Purchase Price Rules</h3><span class="collapsible-arrow">▼</span></div>
-        <div class="collapsible-content">
-            <div class="rule-items-compact">
-                <select id="purchaseOpType"><option value="multiply">Multiply</option><option value="percentage">Add %</option><option value="absolute">Add Amount</option></select>
-                <input type="number" id="purchaseValue" value="1" step="0.01" placeholder="Value" inputmode="decimal">
-                <div class="rule-note">Default ×1 = no change. GST added automatically after this.</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="collapsible-section">
-        <div class="collapsible-header"><h3>📊 Sale Price Rules</h3><span class="collapsible-arrow">▼</span></div>
-        <div class="collapsible-content">
-            <div class="rule-items-compact">
-                <select id="saleOpType"><option value="multiply">Multiply</option><option value="percentage">Add %</option><option value="absolute">Add Amount</option></select>
-                <input type="number" id="saleValue" value="1.25" step="0.01" placeholder="Value" inputmode="decimal">
-                <select id="saleLink"><option value="purchase">From Purchase</option><option value="mrp">From MRP</option></select>
-            </div>
-        </div>
-    </div>
-
-    <div class="collapsible-section">
-        <div class="collapsible-header"><h3>🏷️ MRP Rules</h3><span class="collapsible-arrow">▼</span></div>
-        <div class="collapsible-content">
-            <div class="rule-items-compact">
-                <select id="mrpOpType"><option value="multiply">Multiply</option><option value="percentage">Add %</option><option value="absolute">Add Amount</option></select>
-                <input type="number" id="mrpValue" value="2" step="0.01" placeholder="Value" inputmode="decimal">
-                <select id="mrpLink"><option value="sale">From Sale</option><option value="purchase">From Purchase</option></select>
-            </div>
-        </div>
-    </div>
-
-    <div class="history-section" id="historySection">
-        <h3><span>📜 History</span><button class="clear-history-btn" id="clearHistoryBtn">Clear All</button></h3>
-        <div class="history-list" id="historyList"></div>
-    </div>
-
-    <div class="results-section">
-        <div class="table-wrapper">
-            <table class="results-table">
-                <thead>
-                    <tr class="info-header-row">
-                        <th style="width:50%">NAME</th>
-                        <th style="width:50%">GROUP</th>
-                    </tr>
-                    <tr class="price-header-row" id="priceHeader">
-                        <th class="draggable" data-column="sale" style="width:33.33%">SALE</th>
-                        <th class="draggable" data-column="purchase" style="width:33.33%">PURC+GST</th>
-                        <th class="draggable" data-column="mrp" style="width:33.33%">MRP</th>
-                    </tr>
-                </thead>
-                <tbody id="resultsBody">
-                    <tr><td colspan="2" class="empty-state">Enter values above to see calculations</td></tr>
-                </tbody>
-            </table>
-        </div>
-        <div id="actionButtons" class="action-buttons" style="display:none">
-            <button class="main-action-btn" id="historyBtn">📜 HISTORY</button>
-            <button class="main-action-btn" id="copyBtn">📋 COPY</button>
-            <button class="main-action-btn whatsapp-btn" id="whatsappBtn">💬 WHATSAPP</button>
-            <button class="main-action-btn" id="exportBtn">📤 EXPORT</button>
-        </div>
-    </div>
+<div class="input-section">
+<input id="priceInput" placeholder="Enter values (1000 2000 3000)">
 </div>
 
-<!-- Export Modal -->
-<div id="exportModal" class="modal">
-    <div class="modal-content">
-        <span class="close" id="modalClose">&times;</span>
-        <div class="modal-header">📤 Export Options</div>
-        <div class="checkbox-group">
-            <div class="checkbox-item"><input type="checkbox" id="exportName" checked><label for="exportName">Item Name</label></div>
-            <div class="checkbox-item"><input type="checkbox" id="exportPrintName" checked><label for="exportPrintName">Item Print Name (full group name)</label></div>
-            <div class="checkbox-item"><input type="checkbox" id="exportGroup" checked><label for="exportGroup">Item Group (code)</label></div>
-            <div class="checkbox-item"><input type="checkbox" id="exportSale" checked><label for="exportSale">Sale Price</label></div>
-            <div class="checkbox-item"><input type="checkbox" id="exportPurchase" checked><label for="exportPurchase">Purchase Price (with GST)</label></div>
-            <div class="checkbox-item"><input type="checkbox" id="exportMrp" checked><label for="exportMrp">MRP</label></div>
-        </div>
-        <div class="format-buttons">
-            <button class="format-btn" onclick="exportData('csv')">📄 CSV</button>
-            <button class="format-btn" onclick="exportData('excel')">📊 Excel</button>
-            <button class="format-btn" onclick="exportData('pdf')">📕 PDF</button>
-        </div>
-    </div>
+<!-- GST TOGGLE -->
+
+<div class="toggle-row">
+<span style="color:#d4af37;">GST</span>
+<label class="toggle-switch">
+<input type="checkbox" id="gstToggle" checked>
+<span class="slider"></span>
+</label>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+<th style="width:33%">SALE</th>
+<th style="width:34%">PURCHASE</th>
+<th style="width:33%">MRP</th>
+</tr>
+</thead>
+
+<tbody id="result"></tbody>
+</table>
+</div>
+
+</div>
+
 <script>
-// ── Group map: shortcode → print name ──────────────────────────────────────
-const GROUP_MAP = {
-    'BP':    'Beats Plazo',
-    'BS':    'Beats Suit',
-    'BW':    'Bottom Work',
-    'BOTTOM WORK': 'Bottom Work',
-    'C':     'Cotton',
-    'CC':    'Catalogue Cotton',
-    'CD':    'Cotton Dupatta',
-    'CS':    'Cotton Suit',
-    'CYC':   'Cotton',           // cyc → cotton (as listed)
-    'DPT':   'Dupatta',
-    'D':     'Dupatta',
-    'F':     'Frock',
-    'FARSHI':'Farshi',
-    'FSI':   'Farshi',
-    'FS':    'Firdos Suit',
-    'FP':    'Flute Plazo',
-    'G':     'Garara',
-    'GENERAL':'General',
-    'GENTS': 'Gents',
-    'GS':    'Gown',
-    'GWN':   'Gown',
-    'K':     'Kurti',
-    'KAPDA': 'Kapda',
-    'L':     'Lacha',
-    'LGA':   'Nayra Lehenga',
-    'MAKHNA':'Makhna',
-    'N':     'Nayra Lehenga',
-    'P':     'Plazo',
-    'PPL':   'Paplon',
-    'PAPLON':'Paplon',
-    'PAP':   'Paplon',
-    'RM':    'Ready Made',
-    'RP':    'Russian Plazo',
-    'S':     'Suit',
-    'SDP':   'Shaded Plazo',
-    'SRA':   'Sharara',
-    'T':     'Trouser',
-    // legacy / extra
-    'SC':    'Salwar Suit',
-    'SH':    'Sharara',
-    'GP':    'Gharara Plazo',
-    'ANK':   'Anarkali',
-    'MX':    'Maxi',
-    'JMP':   'Jumpsuit',
-    'INDO':  'Indo-Western',
-    'KAF':   'Kaftan',
-    'SAR':   'Saree',
-    'BLS':   'Blouse',
-    'STL':   'Stole',
-    'SS':    'Silk Suit',
-    'ES':    'Embroidered Suit',
-    'NET':   'Net Suit',
-    'VL':    'Velvet Suit',
-    'JS':    'Jacquard Suit',
-    'KP':    'Kurti Plazo',
-    'LC':    'Lehenga Choli',
-    'LS':    'Lawn Suit',
-    'SET':   'Co-ord Set',
-    'SKT':   'Skirt',
-};
 
-function expandGroup(c) {
-    const k = (c || '').toUpperCase().trim();
-    return GROUP_MAP[k] || c || '';
+function applyGST(val){
+    const gstOn=document.getElementById('gstToggle').checked;
+    if(!gstOn) return val;
+
+    let rate = val<=2500 ? 0.05 : 0.18;
+    return val*(1+rate);
 }
 
-// ── GST ──────────────────────────────────────────────────────────────────────
-function applyGST(purchasePrice) {
-    const rate = purchasePrice <= 2500 ? 0.05 : 0.18;
-    return purchasePrice * (1 + rate);
-}
-function gstLabel(purchasePrice) {
-    return purchasePrice <= 2500 ? 'GST 5%' : 'GST 18%';
-}
+function calc(){
+    let input=document.getElementById('priceInput').value;
+    let values=input.split(/[ ,]+/).map(Number).filter(v=>!isNaN(v));
 
-// ── state ────────────────────────────────────────────────────────────────────
-let columnOrder = ['sale','purchase','mrp'];
-const completedRows = new Set(), rowData = new Map();
-let calcHistory = JSON.parse(localStorage.getItem('srFashionHistory') || '[]');
+    let html="";
 
-const priceInput = document.getElementById('priceInput');
-const autoNumTog = document.getElementById('autoNumberToggle');
+    values.forEach(v=>{
+        let purchase=applyGST(v);
+        let sale = purchase*1.25;
+        let mrp = sale*2;
 
-priceInput.addEventListener('input', function(){ this.value = this.value.replace(/[^0-9.,\s]/g,''); });
-priceInput.addEventListener('keypress', function(e){ if(!/[0-9.,\s]/.test(String.fromCharCode(e.which))) e.preventDefault(); });
-
-function init(){
-    loadHistory();
-    document.getElementById('clearInputBtn').addEventListener('click',()=>{
-        priceInput.value=''; rowData.clear(); completedRows.clear(); updateResults(); showNotif('✕ Cleared');
-    });
-    document.getElementById('historyBtn').addEventListener('click',()=>{
-        const hs=document.getElementById('historySection');
-        hs.style.display=hs.style.display==='block'?'none':'block';
-    });
-    document.getElementById('clearHistoryBtn').addEventListener('click', clearAllHistory);
-    document.getElementById('exportBtn').addEventListener('click',()=>{ document.getElementById('exportModal').style.display='block'; });
-    document.getElementById('modalClose').addEventListener('click',()=>{ document.getElementById('exportModal').style.display='none'; });
-    document.getElementById('exportModal').addEventListener('click',e=>{
-        if(e.target===document.getElementById('exportModal')) document.getElementById('exportModal').style.display='none';
-    });
-    document.getElementById('copyBtn').addEventListener('click', copyData);
-    document.getElementById('whatsappBtn').addEventListener('click', shareWA);
-    autoNumTog.addEventListener('change', updateResults);
-    document.querySelectorAll('.collapsible-header').forEach(h=>h.addEventListener('click',()=>h.parentElement.classList.toggle('open')));
-    document.querySelectorAll('.radio-option').forEach(opt=>{
-        opt.addEventListener('click',()=>{
-            document.querySelectorAll('.radio-option').forEach(o=>o.classList.remove('active'));
-            opt.classList.add('active'); opt.querySelector('input').checked=true; updateResults();
-        });
-    });
-    ['purchaseOpType','purchaseValue','saleOpType','saleValue','saleLink','mrpOpType','mrpValue','mrpLink'].forEach(id=>{
-        const el=document.getElementById(id);
-        el.addEventListener('change', updateResults); el.addEventListener('input', updateResults);
-    });
-    priceInput.addEventListener('input', updateResults);
-}
-
-function showNotif(msg){
-    const n=document.createElement('div');
-    n.style.cssText='position:fixed;top:20px;right:20px;background:rgba(212,175,55,0.95);color:#1e1e1e;padding:15px 25px;border-radius:8px;font-weight:700;z-index:10000;box-shadow:0 4px 12px rgba(0,0,0,0.3);font-size:1.1em;';
-    n.textContent=msg; document.body.appendChild(n);
-    setTimeout(()=>{ n.style.transition='opacity 0.3s'; n.style.opacity='0'; setTimeout(()=>n.remove(),300); },2000);
-}
-
-function loadHistory(){
-    const hl=document.getElementById('historyList'); hl.innerHTML='';
-    if(!calcHistory.length){ hl.innerHTML='<div class="history-item" style="color:#666;font-style:italic;">No history yet</div>'; return; }
-    calcHistory.slice(-20).reverse().forEach(item=>{
-        const d=document.createElement('div'); d.className='history-item';
-        const wd=(item.rowData||[]).filter(r=>r.name||r.group);
-        d.innerHTML=`<div class="history-item-time">${item.timestamp} - ${item.date}</div>
-            <div class="history-item-values">Values: ${item.inputValues}</div>
-            ${wd.length?`<div class="history-item-details">${wd.length} item(s) with details</div>`:''}`;
-        d.addEventListener('click',()=>loadHistoryItem(item));
-        hl.appendChild(d);
-    });
-}
-
-function loadHistoryItem(item){
-    priceInput.value=item.inputValues; rowData.clear();
-    (item.rowData||[]).forEach((d,i)=>rowData.set(i,{name:d.name||'',group:d.group||''}));
-    const r=document.querySelector(`input[name="baseType"][value="${item.baseType}"]`);
-    if(r){ r.checked=true; document.querySelectorAll('.radio-option').forEach(o=>o.classList.remove('active')); r.closest('.radio-option').classList.add('active'); }
-    if(item.rules){
-        if(item.rules.purchase){ document.getElementById('purchaseOpType').value=item.rules.purchase.opType||'multiply'; document.getElementById('purchaseValue').value=item.rules.purchase.value||1; }
-        if(item.rules.sale){ document.getElementById('saleOpType').value=item.rules.sale.opType||'multiply'; document.getElementById('saleValue').value=item.rules.sale.value||1.25; document.getElementById('saleLink').value=item.rules.sale.link||'purchase'; }
-        if(item.rules.mrp){ document.getElementById('mrpOpType').value=item.rules.mrp.opType||'multiply'; document.getElementById('mrpValue').value=item.rules.mrp.value||2; document.getElementById('mrpLink').value=item.rules.mrp.link||'sale'; }
-    }
-    updateResults(); document.getElementById('historySection').style.display='none'; showNotif('↶ History loaded');
-}
-
-function saveToHistory(){
-    const val=priceInput.value.trim(); if(!val) return;
-    const rd=[]; rowData.forEach((d,i)=>rd[i]={name:d.name||'',group:d.group||''});
-    const item={
-        timestamp:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
-        date:new Date().toLocaleDateString(), inputValues:val,
-        baseType:document.querySelector('input[name="baseType"]:checked').value, rowData:rd,
-        rules:{
-            purchase:{opType:document.getElementById('purchaseOpType').value,value:document.getElementById('purchaseValue').value},
-            sale:{opType:document.getElementById('saleOpType').value,value:document.getElementById('saleValue').value,link:document.getElementById('saleLink').value},
-            mrp:{opType:document.getElementById('mrpOpType').value,value:document.getElementById('mrpValue').value,link:document.getElementById('mrpLink').value}
-        }
-    };
-    calcHistory=calcHistory.filter(h=>h.inputValues!==item.inputValues);
-    calcHistory.push(item); if(calcHistory.length>50) calcHistory=calcHistory.slice(-50);
-    localStorage.setItem('srFashionHistory',JSON.stringify(calcHistory)); loadHistory();
-}
-
-function clearAllHistory(){
-    if(confirm('Clear all history?')){ calcHistory=[]; localStorage.removeItem('srFashionHistory'); loadHistory(); showNotif('🗑️ History cleared'); }
-}
-
-let draggedColumn=null;
-function setupDragEvents(){
-    document.querySelectorAll('th.draggable').forEach(th=>{
-        th.draggable=true;
-        th.addEventListener('dragstart',e=>{ draggedColumn=th; th.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; });
-        th.addEventListener('dragend',()=>{ th.classList.remove('dragging'); document.querySelectorAll('th').forEach(h=>h.classList.remove('drag-over')); });
-        th.addEventListener('dragover',e=>{ e.preventDefault(); if(th!==draggedColumn&&th.classList.contains('draggable')) th.classList.add('drag-over'); });
-        th.addEventListener('dragleave',()=>th.classList.remove('drag-over'));
-        th.addEventListener('drop',e=>{
-            e.preventDefault();
-            if(th!==draggedColumn&&th.classList.contains('draggable')){
-                const di=columnOrder.indexOf(draggedColumn.dataset.column), ti=columnOrder.indexOf(th.dataset.column);
-                columnOrder.splice(di,1); columnOrder.splice(ti,0,draggedColumn.dataset.column); reorderColumns();
-            }
-            th.classList.remove('drag-over');
-        });
-    });
-}
-
-function reorderColumns(){
-    const ph=document.getElementById('priceHeader'); ph.innerHTML='';
-    columnOrder.forEach(col=>{
-        const th=document.createElement('th'); th.className='draggable'; th.dataset.column=col; th.style.width='33.33%';
-        th.textContent=col==='purchase'?'PURC+GST':col==='sale'?'SALE':'MRP'; ph.appendChild(th);
-    });
-    setupDragEvents(); updateResults();
-}
-
-function applyOp(b,op,v){ v=parseFloat(v); if(op==='multiply') return b*v; if(op==='percentage') return b*(1+v/100); if(op==='absolute') return b+v; return b; }
-function revOp(r,op,v){ v=parseFloat(v); if(op==='multiply') return r/v; if(op==='percentage') return r/(1+v/100); if(op==='absolute') return r-v; return r; }
-function r10(n){ const l=n%10; return l<=5?Math.floor(n/10)*10:Math.ceil(n/10)*10; }
-
-function calcPrices(base, baseType){
-    const pOp=document.getElementById('purchaseOpType').value, pV=document.getElementById('purchaseValue').value;
-    const sOp=document.getElementById('saleOpType').value, sV=document.getElementById('saleValue').value, sLk=document.getElementById('saleLink').value;
-    const mOp=document.getElementById('mrpOpType').value, mV=document.getElementById('mrpValue').value, mLk=document.getElementById('mrpLink').value;
-    let purchaseRaw, purchase, sale, mrp, as;
-
-    if(baseType==='purchase'){
-        purchaseRaw = applyOp(base,pOp,pV);
-        purchase = applyGST(purchaseRaw);
-        as = applyOp(sLk==='purchase' ? purchase : base, sOp, sV);
-        sale = r10(as);
-        mrp = mLk==='sale' ? applyOp(as,mOp,mV) : applyOp(purchase,mOp,mV);
-    } else {
-        mrp = base;
-        if(mLk==='sale'){
-            as = revOp(mrp,mOp,mV); sale=r10(as);
-            purchaseRaw = revOp(revOp(as,sOp,sV),pOp,pV);
-            purchase = applyGST(purchaseRaw);
-        } else {
-            purchaseRaw = revOp(revOp(mrp,mOp,mV),pOp,pV);
-            purchase = applyGST(purchaseRaw);
-            as = applyOp(revOp(mrp,mOp,mV),sOp,sV); sale=r10(as);
-        }
-    }
-    return { purchase, sale, mrp, purchaseRaw };
-}
-
-function fmt(v){ return '₹'+v.toFixed(2); }
-function fmtP(v){ return v.toFixed(2); }
-function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-function parseValues(){
-    return priceInput.value.trim().split(/[,\s]+/).map(v=>v.trim()).filter(Boolean).map(Number).filter(v=>!isNaN(v));
-}
-
-function updateResults(){
-    const values=parseValues();
-    if(!values.length){
-        document.getElementById('resultsBody').innerHTML=`<tr><td colspan="2" class="empty-state">Enter values above to see calculations</td></tr>`;
-        document.getElementById('actionButtons').style.display='none'; return;
-    }
-    saveToHistory();
-    const baseType=document.querySelector('input[name="baseType"]:checked').value;
-    const useNum=autoNumTog.checked;
-    let html='';
-    values.forEach((val,i)=>{
-        const prices=calcPrices(val,baseType), done=completedRows.has(i);
-        if(!rowData.has(i)) rowData.set(i,{name:'',group:''});
-        const d=rowData.get(i), pair=`pair-${(i%3)+1}`, n=i+1;
-        const dispName=useNum&&d.name?`${n} ${d.name}`:d.name;
-        const ph=useNum?`${n}. Product Name`:'Product Name';
-        const groupHint=expandGroup(d.group);
-        const gLabel=gstLabel(prices.purchaseRaw);
         html+=`
-        <tr class="info-row ${pair}${done?' completed':''}">
-            <td style="width:50%" onclick="event.stopPropagation()">
-                <input class="editable-field" placeholder="${ph}" value="${esc(dispName)}"
-                    onchange="saveNameField(${i},this.value,${n})" onclick="event.stopPropagation()">
-            </td>
-            <td style="width:50%" onclick="event.stopPropagation()" title="${esc(groupHint)}">
-                <input class="editable-field" placeholder="e.g. P, S, CC" value="${esc(d.group)}"
-                    onchange="saveField(${i},'group',this.value)" onclick="event.stopPropagation()">
-                ${groupHint&&groupHint!==d.group?`<div style="font-size:0.72em;color:#888;padding-left:8px;margin-top:2px;">${esc(groupHint)}</div>`:''}
-            </td>
+        <tr>
+        <td class="price">₹${sale.toFixed(0)}</td>
+        <td class="price">₹${purchase.toFixed(0)}</td>
+        <td class="price">₹${mrp.toFixed(0)}</td>
         </tr>
-        <tr class="values-row ${pair}${done?' completed':''}">`;
-        columnOrder.forEach(col=>{
-            if(col==='purchase'){
-                html+=`<td class="price-cell" style="width:33.33%" onclick="toggleDone(${i})">${fmt(prices[col])}<span class="gst-tag">${gLabel}</span></td>`;
-            } else {
-                html+=`<td class="price-cell" style="width:33.33%" onclick="toggleDone(${i})">${fmt(prices[col])}</td>`;
-            }
-        });
-        html+=`</tr>`;
+        `;
     });
-    document.getElementById('resultsBody').innerHTML=html;
-    document.getElementById('actionButtons').style.display='flex';
-    setTimeout(setupDragEvents,0);
+
+    document.getElementById('result').innerHTML=html;
 }
 
-function saveField(i,field,val){ if(!rowData.has(i)) rowData.set(i,{name:'',group:''}); rowData.get(i)[field]=val; saveToHistory(); }
-function saveNameField(i,val,n){
-    if(!rowData.has(i)) rowData.set(i,{name:'',group:''});
-    let c=val; const p1=`${n} `, p2=`${n}. `;
-    if(c.startsWith(p2)) c=c.slice(p2.length); else if(c.startsWith(p1)) c=c.slice(p1.length);
-    rowData.get(i).name=c.trim(); saveToHistory();
-}
-function toggleDone(i){ completedRows.has(i)?completedRows.delete(i):completedRows.add(i); updateResults(); }
+document.getElementById('priceInput').addEventListener('input',calc);
+document.getElementById('gstToggle').addEventListener('change',calc);
 
-function getFields(){
-    return{
-        name:document.getElementById('exportName').checked,
-        printName:document.getElementById('exportPrintName').checked,
-        group:document.getElementById('exportGroup').checked,
-        sale:document.getElementById('exportSale').checked,
-        purchase:document.getElementById('exportPurchase').checked,
-        mrp:document.getElementById('exportMrp').checked,
-    };
-}
-
-function buildRows(){
-    const values=parseValues(), base=document.querySelector('input[name="baseType"]:checked').value, useNum=autoNumTog.checked;
-    return values.map((v,i)=>{
-        const prices=calcPrices(v,base), d=rowData.get(i)||{name:'',group:''}, n=i+1;
-        const nameClean=(d.name||'').toUpperCase();
-        const nameExport=useNum?(nameClean?`${n} ${nameClean}`:`${n}`):(nameClean||'');
-        const groupCode=(d.group||'').toUpperCase().trim();
-        const printName=expandGroup(d.group);
-        return{ name:nameExport, printName, group:groupCode, sale:prices.sale, purchase:prices.purchase, mrp:prices.mrp };
-    });
-}
-
-function buildMatrix(rows,f){
-    const h=[], data=[];
-    if(f.name) h.push('ITEM NAME');
-    if(f.printName) h.push('ITEM PRINT NAME');
-    if(f.group) h.push('ITEM GROUP');
-    if(f.sale) h.push('SALE PRICE');
-    if(f.purchase) h.push('PURCHASE PRICE');
-    if(f.mrp) h.push('MRP');
-    rows.forEach(r=>{
-        const row=[];
-        if(f.name) row.push(r.name||'');
-        if(f.printName) row.push(r.printName||'');
-        if(f.group) row.push(r.group||'');
-        if(f.sale) row.push(fmtP(r.sale));
-        if(f.purchase) row.push(fmtP(r.purchase));
-        if(f.mrp) row.push(fmtP(r.mrp));
-        data.push(row);
-    });
-    return{headers:h,data};
-}
-
-function buildText(rows,f){
-    return rows.map(r=>{
-        const c=[];
-        if(f.name) c.push(r.name||'-');
-        if(f.printName) c.push(r.printName||'-');
-        if(f.group) c.push(r.group||'-');
-        if(f.sale) c.push(fmtP(r.sale));
-        if(f.purchase) c.push(fmtP(r.purchase));
-        if(f.mrp) c.push(fmtP(r.mrp));
-        return c.join(', ');
-    }).join('\n');
-}
-
-function copyData(){
-    const text=buildText(buildRows(),getFields());
-    const ta=document.createElement('textarea'); ta.value=text; ta.style.cssText='position:fixed;opacity:0'; document.body.appendChild(ta);
-    ta.select(); ta.setSelectionRange(0,99999);
-    try{ document.execCommand('copy')?showNotif('✓ Copied!'):showNotif('❌ Copy failed'); }catch{ showNotif('❌ Copy failed'); }
-    document.body.removeChild(ta);
-}
-function shareWA(){
-    const text='SR FASHION - Price List\n\n'+buildText(buildRows(),getFields());
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`,'_blank'); showNotif('📱 Opening WhatsApp…');
-}
-
-function exportData(format){
-    const {headers,data}=buildMatrix(buildRows(),getFields());
-    if(format==='csv') exportCSV(headers,data);
-    if(format==='excel') exportExcel(headers,data);
-    if(format==='pdf') exportPDF(headers,data);
-    document.getElementById('exportModal').style.display='none';
-}
-
-function exportCSV(h,d){
-    let csv=h.join(',')+'\n'; d.forEach(r=>{ csv+=r.map(c=>`"${c}"`).join(',')+'\n'; });
-    const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}), link=document.createElement('a');
-    link.href=URL.createObjectURL(blob); link.download=`SR_Fashion_${new Date().toISOString().split('T')[0]}.csv`;
-    if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){
-        const fr=new FileReader(); fr.onload=e=>{ window.location.href=e.target.result; }; fr.readAsDataURL(blob); showNotif('📱 Check downloads');
-    } else { document.body.appendChild(link); link.click(); document.body.removeChild(link); showNotif('✓ CSV downloaded!'); }
-}
-function exportExcel(h,d){
-    const ws=XLSX.utils.aoa_to_sheet([h,...d]), wb=XLSX.utils.book_new();
-    // Style header row bold
-    const range=XLSX.utils.decode_range(ws['!ref']);
-    for(let C=range.s.c;C<=range.e.c;C++){
-        const addr=XLSX.utils.encode_cell({r:0,c:C});
-        if(!ws[addr]) continue;
-        ws[addr].s={font:{bold:true}};
-    }
-    XLSX.utils.book_append_sheet(wb,ws,'SR Fashion');
-    XLSX.writeFile(wb,`SR_Fashion_${new Date().toISOString().split('T')[0]}.xlsx`); showNotif('✓ Excel downloaded!');
-}
-function exportPDF(h,d){
-    const {jsPDF}=window.jspdf, doc=new jsPDF();
-    doc.setFontSize(18); doc.text('SR FASHION - Price List',14,15);
-    doc.setFontSize(10); doc.text(`Generated: ${new Date().toLocaleDateString()}`,14,22);
-    doc.autoTable({head:[h],body:d,startY:30,theme:'grid',styles:{fontSize:9,cellPadding:3},headStyles:{fillColor:[212,175,55],textColor:[30,30,30],fontStyle:'bold'},alternateRowStyles:{fillColor:[245,245,245]}});
-    doc.save(`SR_Fashion_${new Date().toISOString().split('T')[0]}.pdf`); showNotif('✓ PDF downloaded!');
-}
-
-setupDragEvents();
-init();
 </script>
+
 </body>
 </html>
