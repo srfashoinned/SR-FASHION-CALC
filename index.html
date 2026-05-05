@@ -1,191 +1,542 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SR FASHION - Pricing Calculator</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SR FASHION</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;max-width:100%;overflow-x:hidden;}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#1a1a1a 0%,#2d2416 100%);min-height:100vh;padding:10px;}
 
-body{
-    font-family:'Segoe UI',sans-serif;
-    background:linear-gradient(135deg,#1a1a1a,#2d2416);
-    padding:15px;
-    overflow-x:hidden;
-}
+.container{width:100%;max-width:560px;margin:0 auto;background:#1e1e1e;border-radius:14px;box-shadow:0 8px 32px rgba(212,175,55,0.25);padding:14px;border:2px solid #d4af37;}
 
-.container{
-    width:100%;
-    max-width:100%;
-    background:#1e1e1e;
-    border-radius:15px;
-    padding:20px;
-    border:2px solid #d4af37;
-}
+h1{color:#d4af37;text-align:center;margin-bottom:14px;font-size:1.7em;text-shadow:0 0 16px rgba(212,175,55,0.5);letter-spacing:3px;font-weight:700;}
 
-h1{
-    color:#d4af37;
-    text-align:center;
-    margin-bottom:15px;
-}
+.base-sel{display:flex;gap:8px;margin-bottom:12px;}
+.radio-opt{background:#2a2a2a;padding:9px 0;border-radius:8px;border:2px solid #444;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;flex:1;transition:all 0.2s;}
+.radio-opt:hover,.radio-opt.active{border-color:#d4af37;}
+.radio-opt.active{background:rgba(212,175,55,0.13);box-shadow:0 0 10px rgba(212,175,55,0.2);}
+.radio-opt input{accent-color:#d4af37;width:14px;height:14px;}
+.radio-opt span{color:#d4af37;font-weight:700;font-size:0.88em;}
 
-.input-section input{
-    width:100%;
-    padding:14px;
-    border-radius:8px;
-    border:2px solid #444;
-    background:#2a2a2a;
-    color:#d4af37;
-}
+.inp-wrap{position:relative;margin-bottom:10px;}
+.inp-wrap input{width:100%;padding:12px 44px 12px 13px;border:2px solid #444;border-radius:9px;font-size:0.97em;background:#2a2a2a;color:#d4af37;font-weight:600;transition:border-color 0.2s;}
+.inp-wrap input:focus{outline:none;border-color:#d4af37;box-shadow:0 0 12px rgba(212,175,55,0.25);}
+.inp-wrap input::placeholder{color:#555;}
+.clr-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(212,175,55,0.22);border:2px solid #d4af37;color:#d4af37;width:30px;height:30px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.9em;font-weight:bold;transition:all 0.2s;}
+.clr-btn:hover{background:rgba(212,175,55,0.42);}
 
-.toggle-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-top:10px;
-    margin-bottom:10px;
-}
+.tog-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;background:#2a2a2a;border:2px solid #444;border-radius:8px;padding:9px 12px;}
+.tog-row.gst{border-color:#c9a227;background:rgba(212,175,55,0.07);}
+.tl{color:#d4af37;font-weight:700;font-size:0.84em;flex:1;min-width:0;}
+.th{color:#777;font-size:0.72em;font-style:italic;white-space:nowrap;}
+.gst-rates{display:flex;gap:5px;align-items:center;flex-shrink:0;}
+.gr{background:rgba(212,175,55,0.13);border:1px solid #c9a227;border-radius:4px;padding:2px 6px;color:#d4af37;font-size:0.7em;font-weight:700;white-space:nowrap;}
+.sw{position:relative;width:44px;height:22px;flex-shrink:0;}
+.sw input{opacity:0;width:0;height:0;}
+.sl{position:absolute;cursor:pointer;inset:0;background:#444;border-radius:22px;transition:0.25s;}
+.sl:before{position:absolute;content:"";height:14px;width:14px;left:4px;bottom:4px;background:#888;border-radius:50%;transition:0.25s;}
+.sw input:checked+.sl{background:rgba(212,175,55,0.38);border:1px solid #d4af37;}
+.sw input:checked+.sl:before{transform:translateX(22px);background:#d4af37;}
 
-.toggle-switch{
-    position:relative;
-    width:50px;height:25px;
-}
-.toggle-switch input{display:none;}
-.slider{
-    position:absolute;
-    background:#444;
-    border-radius:25px;
-    top:0;left:0;right:0;bottom:0;
-}
-.slider:before{
-    content:"";
-    position:absolute;
-    height:18px;width:18px;
-    left:4px;top:3px;
-    background:#999;
-    border-radius:50%;
-    transition:0.3s;
-}
-input:checked + .slider{
-    background:#d4af37;
-}
-input:checked + .slider:before{
-    transform:translateX(24px);
-    background:#fff;
-}
+.col-sec{background:#2a2a2a;border:2px solid #3a3a3a;border-radius:8px;margin-bottom:8px;overflow:hidden;}
+.col-hdr{padding:10px 13px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:rgba(212,175,55,0.1);transition:background 0.2s;}
+.col-hdr:hover{background:rgba(212,175,55,0.18);}
+.col-hdr h3{color:#d4af37;font-size:0.87em;font-weight:700;}
+.col-arr{color:#d4af37;font-size:1em;transition:transform 0.3s;font-weight:bold;}
+.col-sec.open .col-arr{transform:rotate(180deg);}
+.col-body{max-height:0;overflow:hidden;transition:max-height 0.3s ease;}
+.col-sec.open .col-body{max-height:160px;}
+.rule-grid{padding:9px 11px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;}
+.rule-grid select,.rule-grid input{padding:7px 4px;border:1px solid #444;border-radius:5px;font-size:0.78em;background:#1e1e1e;color:#d4af37;font-weight:600;width:100%;}
+.rule-grid select:focus,.rule-grid input:focus{outline:none;border-color:#d4af37;}
+.rule-note{grid-column:1/-1;color:#777;font-size:0.7em;text-align:center;padding-top:3px;}
 
-/* TABLE FIX */
-.table-wrapper{
-    overflow:hidden;
-    border:2px solid #444;
-    border-radius:10px;
-}
+.hist-sec{margin-top:10px;background:#2a2a2a;border:2px solid #444;border-radius:9px;padding:11px;display:none;}
+.hist-sec h3{color:#d4af37;margin-bottom:8px;font-size:0.95em;display:flex;justify-content:space-between;align-items:center;}
+.hist-list{max-height:220px;overflow-y:auto;}
+.hist-item{padding:9px;border-bottom:1px solid #333;color:#d4af37;font-weight:600;cursor:pointer;border-radius:4px;font-size:0.82em;}
+.hist-item:hover{background:rgba(212,175,55,0.08);}
+.hist-sub{font-size:0.76em;color:#888;margin-top:2px;}
+.clr-hist{background:rgba(212,175,55,0.12);border:2px solid #d4af37;color:#d4af37;padding:3px 8px;border-radius:5px;cursor:pointer;font-size:0.78em;font-weight:700;}
+.clr-hist:hover{background:rgba(212,175,55,0.3);}
 
-table{
-    width:100%;
-    border-collapse:collapse;
-    table-layout:fixed;
-}
+/* ── ITEM CARDS ── */
+.results-section{margin-top:14px;}
+.item-card{border-radius:10px;margin-bottom:9px;border:2px solid #333;overflow:hidden;transition:opacity 0.25s;}
+.item-card.done{opacity:0.35;}
+.item-card.done .p-val{text-decoration:line-through;}
 
-th,td{
-    padding:8px 6px;
-    text-align:center;
-    color:#d4af37;
-    font-weight:bold;
-    word-wrap:break-word;
-    white-space:normal;
-}
+.card-top{display:flex;gap:6px;padding:7px 9px 18px;border-bottom:1px solid #2e2e2e;position:relative;}
+.name-inp{background:transparent;border:1px solid transparent;color:#d4af37;padding:5px 6px;border-radius:5px;font-size:0.84em;font-weight:700;flex:1;min-width:0;}
+.name-inp:focus{outline:none;border-color:#d4af37;background:rgba(212,175,55,0.07);}
+.name-inp::placeholder{color:#505050;}
+.grp-wrap{flex:0 0 76px;position:relative;}
+.grp-inp{width:100%;text-align:center;background:transparent;border:1px solid transparent;color:#d4af37;padding:5px 3px;border-radius:5px;font-size:0.82em;font-weight:700;}
+.grp-inp:focus{outline:none;border-color:#d4af37;background:rgba(212,175,55,0.07);}
+.grp-inp::placeholder{color:#505050;}
+.grp-hint{position:absolute;bottom:-13px;left:0;right:0;text-align:center;font-size:0.62em;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;}
 
-thead{
-    background:rgba(212,175,55,0.2);
+/* price row — fixed, no overflow */
+.price-row{display:grid;grid-template-columns:1fr 1fr 1fr;width:100%;cursor:pointer;}
+.p-cell{padding:9px 4px;text-align:center;border-right:1px solid #2a2a2a;overflow:hidden;min-width:0;}
+.p-cell:last-child{border-right:none;}
+.p-label{font-size:0.57em;color:#888;font-weight:700;letter-spacing:0.3px;text-transform:uppercase;margin-bottom:3px;}
+.p-val{
+  font-family:'Courier New',monospace;
+  font-size:clamp(0.7em,3vw,0.95em);
+  font-weight:900;
+  color:#d4af37;
+  text-shadow:0 0 5px rgba(212,175,55,0.3);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:block;
+  line-height:1.3;
 }
+.p-gst{display:block;font-size:0.57em;color:#a08828;font-weight:600;margin-top:1px;}
 
-.price{
-    font-size:1.1em;
-}
+.band-1{background:linear-gradient(135deg,rgba(139,69,19,0.16),rgba(139,69,19,0.08));}
+.band-2{background:linear-gradient(135deg,rgba(25,25,112,0.16),rgba(25,25,112,0.08));}
+.band-3{background:linear-gradient(135deg,rgba(85,107,47,0.16),rgba(85,107,47,0.08));}
 
-/* RESPONSIVE */
-@media(max-width:600px){
-    th,td{font-size:12px;}
-}
+.empty-state{text-align:center;padding:32px;color:#555;font-style:italic;font-size:0.9em;}
+
+.action-buttons{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px;}
+.act-btn{background:rgba(212,175,55,0.18);border:2px solid #d4af37;color:#d4af37;padding:10px 6px;border-radius:9px;cursor:pointer;font-size:0.82em;font-weight:700;transition:all 0.22s;text-align:center;}
+.act-btn:hover{background:rgba(212,175,55,0.32);transform:translateY(-2px);}
+.wa-btn{background:rgba(37,211,102,0.15);border-color:#25D366;color:#25D366;}
+.wa-btn:hover{background:rgba(37,211,102,0.28);}
+
+.modal{display:none;position:fixed;z-index:1000;inset:0;background:rgba(0,0,0,0.87);backdrop-filter:blur(4px);overflow-y:auto;padding:20px 12px;}
+.modal-box{background:linear-gradient(135deg,#2a2a2a,#1e1e1e);margin:0 auto;padding:20px 16px 16px;border:3px solid #d4af37;border-radius:13px;width:100%;max-width:360px;position:relative;}
+.modal-title{color:#d4af37;font-size:1.05em;font-weight:700;margin-bottom:13px;text-align:center;}
+.mclose{color:#d4af37;position:absolute;top:11px;right:13px;font-size:22px;font-weight:bold;cursor:pointer;line-height:1;}
+.mclose:hover{color:#fff;}
+.chk-item{background:rgba(212,175,55,0.07);border:2px solid #333;border-radius:6px;padding:8px 11px;margin-bottom:6px;display:flex;align-items:center;cursor:pointer;transition:all 0.2s;}
+.chk-item:hover{border-color:#d4af37;}
+.chk-item input{width:15px;height:15px;margin-right:9px;accent-color:#d4af37;flex-shrink:0;}
+.chk-item label{color:#d4af37;font-weight:600;font-size:0.84em;cursor:pointer;}
+.fmt-btns{display:flex;gap:7px;margin-top:12px;}
+.fmt-btn{background:rgba(212,175,55,0.18);border:2px solid #d4af37;color:#d4af37;padding:9px;border-radius:6px;cursor:pointer;font-size:0.84em;font-weight:700;flex:1;transition:all 0.2s;}
+.fmt-btn:hover{background:rgba(212,175,55,0.35);}
+
+.notif{position:fixed;top:14px;right:14px;background:rgba(212,175,55,0.96);color:#1a1a1a;padding:11px 18px;border-radius:8px;font-weight:700;z-index:10000;font-size:0.88em;box-shadow:0 4px 12px rgba(0,0,0,0.35);}
 </style>
-
 </head>
-
 <body>
-
 <div class="container">
-<h1>SR FASHION</h1>
+  <h1>SR FASHION</h1>
 
-<div class="input-section">
-<input id="priceInput" placeholder="Enter values (1000 2000 3000)">
+  <div class="base-sel">
+    <label class="radio-opt active" data-value="purchase">
+      <input type="radio" name="baseType" value="purchase" checked><span>Purchase Price</span>
+    </label>
+    <label class="radio-opt" data-value="mrp">
+      <input type="radio" name="baseType" value="mrp"><span>MRP</span>
+    </label>
+  </div>
+
+  <div class="inp-wrap">
+    <input type="text" id="priceInput" inputmode="decimal" placeholder="Enter values e.g. 1150 2000 3500">
+    <div class="clr-btn" id="clearInputBtn">✕</div>
+  </div>
+
+  <!-- GST toggle -->
+  <div class="tog-row gst">
+    <span class="tl">🧾 GST on Purchase</span>
+    <div class="gst-rates">
+      <span class="gr">5% ≤₹2500</span>
+      <span class="gr">18% &gt;₹2500</span>
+    </div>
+    <label class="sw">
+      <input type="checkbox" id="gstToggle" checked>
+      <span class="sl"></span>
+    </label>
+  </div>
+
+  <!-- Auto-number toggle -->
+  <div class="tog-row">
+    <span class="tl">🔢 Auto-Number Names</span>
+    <span class="th">1, 2, 3…</span>
+    <label class="sw">
+      <input type="checkbox" id="autoNumberToggle" checked>
+      <span class="sl"></span>
+    </label>
+  </div>
+
+  <div class="col-sec">
+    <div class="col-hdr"><h3>💰 Purchase Price Rules</h3><span class="col-arr">▼</span></div>
+    <div class="col-body">
+      <div class="rule-grid">
+        <select id="purchaseOpType"><option value="multiply">Multiply</option><option value="percentage">Add %</option><option value="absolute">Add ₹</option></select>
+        <input type="number" id="purchaseValue" value="1" step="0.01" inputmode="decimal">
+        <div></div>
+        <div class="rule-note">GST is applied after (when enabled)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sec">
+    <div class="col-hdr"><h3>📊 Sale Price Rules</h3><span class="col-arr">▼</span></div>
+    <div class="col-body">
+      <div class="rule-grid">
+        <select id="saleOpType"><option value="multiply">Multiply</option><option value="percentage">Add %</option><option value="absolute">Add ₹</option></select>
+        <input type="number" id="saleValue" value="1.25" step="0.01" inputmode="decimal">
+        <select id="saleLink"><option value="purchase">From Purchase</option><option value="mrp">From MRP</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sec">
+    <div class="col-hdr"><h3>🏷️ MRP Rules</h3><span class="col-arr">▼</span></div>
+    <div class="col-body">
+      <div class="rule-grid">
+        <select id="mrpOpType"><option value="multiply">Multiply</option><option value="percentage">Add %</option><option value="absolute">Add ₹</option></select>
+        <input type="number" id="mrpValue" value="2" step="0.01" inputmode="decimal">
+        <select id="mrpLink"><option value="sale">From Sale</option><option value="purchase">From Purchase</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="hist-sec" id="historySection">
+    <h3><span>📜 History</span><button class="clr-hist" id="clearHistoryBtn">Clear All</button></h3>
+    <div class="hist-list" id="historyList"></div>
+  </div>
+
+  <div class="results-section">
+    <div id="cardsContainer">
+      <div class="empty-state">Enter values above to see calculations</div>
+    </div>
+    <div id="actionButtons" class="action-buttons" style="display:none;">
+      <button class="act-btn" id="historyBtn">📜 HISTORY</button>
+      <button class="act-btn" id="copyBtn">📋 COPY</button>
+      <button class="act-btn wa-btn" id="whatsappBtn">💬 WHATSAPP</button>
+      <button class="act-btn" id="exportBtn">📤 EXPORT</button>
+    </div>
+  </div>
 </div>
 
-<!-- GST TOGGLE -->
-
-<div class="toggle-row">
-<span style="color:#d4af37;">GST</span>
-<label class="toggle-switch">
-<input type="checkbox" id="gstToggle" checked>
-<span class="slider"></span>
-</label>
+<div id="exportModal" class="modal">
+  <div class="modal-box">
+    <span class="mclose" id="modalClose">&times;</span>
+    <div class="modal-title">📤 Export Options</div>
+    <div>
+      <div class="chk-item"><input type="checkbox" id="exportName" checked><label for="exportName">Item Name</label></div>
+      <div class="chk-item"><input type="checkbox" id="exportPrintName" checked><label for="exportPrintName">Item Print Name</label></div>
+      <div class="chk-item"><input type="checkbox" id="exportGroup" checked><label for="exportGroup">Item Group (code)</label></div>
+      <div class="chk-item"><input type="checkbox" id="exportSale" checked><label for="exportSale">Sale Price</label></div>
+      <div class="chk-item"><input type="checkbox" id="exportPurchase" checked><label for="exportPurchase">Purchase Price (with GST)</label></div>
+      <div class="chk-item"><input type="checkbox" id="exportMrp" checked><label for="exportMrp">MRP</label></div>
+    </div>
+    <div class="fmt-btns">
+      <button class="fmt-btn" onclick="exportData('csv')">📄 CSV</button>
+      <button class="fmt-btn" onclick="exportData('excel')">📊 Excel</button>
+      <button class="fmt-btn" onclick="exportData('pdf')">📕 PDF</button>
+    </div>
+  </div>
 </div>
 
-<div class="table-wrapper">
-<table>
-<thead>
-<tr>
-<th style="width:33%">SALE</th>
-<th style="width:34%">PURCHASE</th>
-<th style="width:33%">MRP</th>
-</tr>
-</thead>
-
-<tbody id="result"></tbody>
-</table>
-</div>
-
-</div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
+const GM={
+  'BP':'Beats Plazo','BS':'Beats Suit','BW':'Bottom Work','BOTTOM WORK':'Bottom Work',
+  'C':'Cotton','CC':'Catalogue Cotton','CD':'Cotton Dupatta','CS':'Cotton Suit',
+  'CYC':'Cotton','DPT':'Dupatta','D':'Dupatta','F':'Frock',
+  'FARSHI':'Farshi','FSI':'Farshi','FS':'Firdos Suit','FP':'Flute Plazo',
+  'G':'Garara','GENERAL':'General','GENTS':'Gents','GS':'Gown','GWN':'Gown',
+  'K':'Kurti','KAPDA':'Kapda','L':'Lacha','LGA':'Nayra Lehenga',
+  'MAKHNA':'Makhna','N':'Nayra Lehenga','P':'Plazo','PPL':'Paplon',
+  'PAPLON':'Paplon','PAP':'Paplon','RM':'Ready Made','RP':'Russian Plazo',
+  'S':'Suit','SDP':'Shaded Plazo','SRA':'Sharara','T':'Trouser',
+  'SC':'Salwar Suit','SH':'Sharara','GP':'Gharara Plazo','ANK':'Anarkali',
+  'MX':'Maxi','JMP':'Jumpsuit','INDO':'Indo-Western','KAF':'Kaftan',
+  'SAR':'Saree','BLS':'Blouse','STL':'Stole','SS':'Silk Suit',
+  'ES':'Embroidered Suit','NET':'Net Suit','VL':'Velvet Suit','JS':'Jacquard Suit',
+  'KP':'Kurti Plazo','LC':'Lehenga Choli','LS':'Lawn Suit','SET':'Co-ord Set','SKT':'Skirt',
+};
+const eg=c=>{const k=(c||'').toUpperCase().trim();return GM[k]||c||'';};
+const applyOp=(b,op,v)=>{v=parseFloat(v);return op==='multiply'?b*v:op==='percentage'?b*(1+v/100):op==='absolute'?b+v:b;};
+const revOp=(r,op,v)=>{v=parseFloat(v);return op==='multiply'?r/v:op==='percentage'?r/(1+v/100):op==='absolute'?r-v:r;};
+const r10=n=>{const l=n%10;return l<=5?Math.floor(n/10)*10:Math.ceil(n/10)*10;};
+const gstRate=p=>p<=2500?0.05:0.18;
+const withGST=p=>p*(1+gstRate(p));
+const gstLbl=p=>p<=2500?'GST 5%':'GST 18%';
+const fmt=v=>'₹'+v.toFixed(2);
+const fmtP=v=>v.toFixed(2);
+const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-function applyGST(val){
-    const gstOn=document.getElementById('gstToggle').checked;
-    if(!gstOn) return val;
+const completedRows=new Set(),rowData=new Map();
+let calcHistory=JSON.parse(localStorage.getItem('srFH')||'[]');
+const priceInput=document.getElementById('priceInput');
+const autoNumTog=document.getElementById('autoNumberToggle');
+const gstTog=document.getElementById('gstToggle');
 
-    let rate = val<=2500 ? 0.05 : 0.18;
-    return val*(1+rate);
+priceInput.addEventListener('input',function(){this.value=this.value.replace(/[^0-9.,\s]/g,'');});
+
+function parseValues(){
+  return priceInput.value.trim().split(/[,\s]+/).map(v=>v.trim()).filter(Boolean).map(Number).filter(v=>!isNaN(v)&&v>0);
 }
 
-function calc(){
-    let input=document.getElementById('priceInput').value;
-    let values=input.split(/[ ,]+/).map(Number).filter(v=>!isNaN(v));
+function calcPrices(base,baseType){
+  const pOp=document.getElementById('purchaseOpType').value,pV=document.getElementById('purchaseValue').value;
+  const sOp=document.getElementById('saleOpType').value,sV=document.getElementById('saleValue').value,sLk=document.getElementById('saleLink').value;
+  const mOp=document.getElementById('mrpOpType').value,mV=document.getElementById('mrpValue').value,mLk=document.getElementById('mrpLink').value;
+  const useGST=gstTog.checked;
+  let purchaseRaw,purchase,sale,mrp,as;
+  if(baseType==='purchase'){
+    purchaseRaw=applyOp(base,pOp,pV);
+    purchase=useGST?withGST(purchaseRaw):purchaseRaw;
+    const sBase=sLk==='purchase'?purchase:base;
+    as=applyOp(sBase,sOp,sV);sale=r10(as);
+    mrp=mLk==='sale'?applyOp(as,mOp,mV):applyOp(purchase,mOp,mV);
+  }else{
+    mrp=base;
+    if(mLk==='sale'){
+      as=revOp(mrp,mOp,mV);sale=r10(as);
+      purchaseRaw=revOp(revOp(as,sOp,sV),pOp,pV);
+    }else{
+      const bp=revOp(mrp,mOp,mV);
+      purchaseRaw=revOp(bp,pOp,pV);
+      as=applyOp(bp,sOp,sV);sale=r10(as);
+    }
+    purchase=useGST?withGST(purchaseRaw):purchaseRaw;
+  }
+  return{purchase,sale,mrp,purchaseRaw};
+}
 
-    let html="";
+function showNotif(msg){
+  const n=document.createElement('div');n.className='notif';n.textContent=msg;
+  document.body.appendChild(n);
+  setTimeout(()=>{n.style.transition='opacity 0.3s';n.style.opacity='0';setTimeout(()=>n.remove(),300);},2000);
+}
 
-    values.forEach(v=>{
-        let purchase=applyGST(v);
-        let sale = purchase*1.25;
-        let mrp = sale*2;
+function updateResults(){
+  const values=parseValues();
+  const container=document.getElementById('cardsContainer');
+  if(!values.length){
+    container.innerHTML='<div class="empty-state">Enter values above to see calculations</div>';
+    document.getElementById('actionButtons').style.display='none';return;
+  }
+  saveToHistory();
+  const baseType=document.querySelector('input[name="baseType"]:checked').value;
+  const useNum=autoNumTog.checked,useGST=gstTog.checked;
+  const bands=['band-1','band-2','band-3'];
+  let html='';
+  values.forEach((val,i)=>{
+    const p=calcPrices(val,baseType);
+    if(!rowData.has(i))rowData.set(i,{name:'',group:''});
+    const d=rowData.get(i),n=i+1,band=bands[i%3];
+    const dispName=useNum&&d.name?`${n} ${d.name}`:d.name;
+    const ph=useNum?`${n}. Name`:'Product Name';
+    const gh=eg(d.group);
+    const isDone=completedRows.has(i);
+    const gl=gstLbl(p.purchaseRaw);
+    html+=`
+    <div class="item-card ${band}${isDone?' done':''}" id="card-${i}">
+      <div class="card-top">
+        <input class="name-inp" placeholder="${ph}" value="${esc(dispName)}" onchange="saveNameField(${i},this.value,${n})">
+        <div class="grp-wrap">
+          <input class="grp-inp" placeholder="Group" value="${esc(d.group)}" onchange="saveField(${i},'group',this.value)">
+          ${gh&&gh!==d.group?`<div class="grp-hint">${esc(gh)}</div>`:''}
+        </div>
+      </div>
+      <div class="price-row" onclick="toggleDone(${i})">
+        <div class="p-cell">
+          <div class="p-label">SALE</div>
+          <div class="p-val">${fmt(p.sale)}</div>
+        </div>
+        <div class="p-cell">
+          <div class="p-label">PURCHASE</div>
+          <div class="p-val">${fmt(p.purchase)}</div>
+          ${useGST?`<span class="p-gst">${gl}</span>`:''}
+        </div>
+        <div class="p-cell">
+          <div class="p-label">MRP</div>
+          <div class="p-val">${fmt(p.mrp)}</div>
+        </div>
+      </div>
+    </div>`;
+  });
+  container.innerHTML=html;
+  document.getElementById('actionButtons').style.display='grid';
+}
 
-        html+=`
-        <tr>
-        <td class="price">₹${sale.toFixed(0)}</td>
-        <td class="price">₹${purchase.toFixed(0)}</td>
-        <td class="price">₹${mrp.toFixed(0)}</td>
-        </tr>
-        `;
+function saveField(i,f,v){if(!rowData.has(i))rowData.set(i,{name:'',group:''});rowData.get(i)[f]=v;saveToHistory();}
+function saveNameField(i,val,n){
+  if(!rowData.has(i))rowData.set(i,{name:'',group:''});
+  let c=val;const p1=`${n} `,p2=`${n}. `;
+  if(c.startsWith(p2))c=c.slice(p2.length);else if(c.startsWith(p1))c=c.slice(p1.length);
+  rowData.get(i).name=c.trim();saveToHistory();
+}
+function toggleDone(i){completedRows.has(i)?completedRows.delete(i):completedRows.add(i);updateResults();}
+
+function saveToHistory(){
+  const val=priceInput.value.trim();if(!val)return;
+  const rd=[];rowData.forEach((d,i)=>rd[i]={name:d.name||'',group:d.group||''});
+  const item={
+    ts:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
+    dt:new Date().toLocaleDateString(),iv:val,
+    bt:document.querySelector('input[name="baseType"]:checked').value,
+    rd,gst:gstTog.checked,
+    rules:{
+      purchase:{opType:document.getElementById('purchaseOpType').value,value:document.getElementById('purchaseValue').value},
+      sale:{opType:document.getElementById('saleOpType').value,value:document.getElementById('saleValue').value,link:document.getElementById('saleLink').value},
+      mrp:{opType:document.getElementById('mrpOpType').value,value:document.getElementById('mrpValue').value,link:document.getElementById('mrpLink').value}
+    }
+  };
+  calcHistory=calcHistory.filter(h=>h.iv!==item.iv);
+  calcHistory.push(item);if(calcHistory.length>50)calcHistory=calcHistory.slice(-50);
+  localStorage.setItem('srFH',JSON.stringify(calcHistory));loadHistory();
+}
+function loadHistory(){
+  const hl=document.getElementById('historyList');hl.innerHTML='';
+  if(!calcHistory.length){hl.innerHTML='<div class="hist-item" style="color:#555;font-style:italic;">No history yet</div>';return;}
+  calcHistory.slice(-20).reverse().forEach(item=>{
+    const d=document.createElement('div');d.className='hist-item';
+    d.innerHTML=`<div>${item.ts} · ${item.dt}</div><div class="hist-sub">Values: ${item.iv}</div>`;
+    d.addEventListener('click',()=>loadHistoryItem(item));hl.appendChild(d);
+  });
+}
+function loadHistoryItem(item){
+  priceInput.value=item.iv;rowData.clear();
+  (item.rd||[]).forEach((d,i)=>rowData.set(i,{name:d.name||'',group:d.group||''}));
+  const r=document.querySelector(`input[name="baseType"][value="${item.bt}"]`);
+  if(r){r.checked=true;document.querySelectorAll('.radio-opt').forEach(o=>o.classList.remove('active'));r.closest('.radio-opt').classList.add('active');}
+  if(item.gst!==undefined)gstTog.checked=item.gst;
+  if(item.rules){
+    if(item.rules.purchase){document.getElementById('purchaseOpType').value=item.rules.purchase.opType||'multiply';document.getElementById('purchaseValue').value=item.rules.purchase.value||1;}
+    if(item.rules.sale){document.getElementById('saleOpType').value=item.rules.sale.opType||'multiply';document.getElementById('saleValue').value=item.rules.sale.value||1.25;document.getElementById('saleLink').value=item.rules.sale.link||'purchase';}
+    if(item.rules.mrp){document.getElementById('mrpOpType').value=item.rules.mrp.opType||'multiply';document.getElementById('mrpValue').value=item.rules.mrp.value||2;document.getElementById('mrpLink').value=item.rules.mrp.link||'sale';}
+  }
+  updateResults();document.getElementById('historySection').style.display='none';showNotif('↶ History loaded');
+}
+function clearAllHistory(){
+  if(confirm('Clear all history?')){calcHistory=[];localStorage.removeItem('srFH');loadHistory();showNotif('🗑️ Cleared');}
+}
+
+function getFields(){
+  return{
+    name:document.getElementById('exportName').checked,
+    printName:document.getElementById('exportPrintName').checked,
+    group:document.getElementById('exportGroup').checked,
+    sale:document.getElementById('exportSale').checked,
+    purchase:document.getElementById('exportPurchase').checked,
+    mrp:document.getElementById('exportMrp').checked,
+  };
+}
+function buildRows(){
+  const values=parseValues(),base=document.querySelector('input[name="baseType"]:checked').value,useNum=autoNumTog.checked;
+  return values.map((v,i)=>{
+    const p=calcPrices(v,base),d=rowData.get(i)||{name:'',group:''},n=i+1;
+    const nc=(d.name||'').toUpperCase();
+    const nameExport=useNum?(nc?`${n} ${nc}`:`${n}`):(nc||'');
+    return{name:nameExport,printName:eg(d.group),group:(d.group||'').toUpperCase().trim(),sale:p.sale,purchase:p.purchase,mrp:p.mrp};
+  });
+}
+function buildMatrix(rows,f){
+  const h=[],data=[];
+  if(f.name)h.push('ITEM NAME');
+  if(f.printName)h.push('ITEM PRINT NAME');
+  if(f.group)h.push('ITEM GROUP');
+  if(f.sale)h.push('SALE PRICE');
+  if(f.purchase)h.push('PURCHASE PRICE');
+  if(f.mrp)h.push('MRP');
+  rows.forEach(r=>{
+    const row=[];
+    if(f.name)row.push(r.name||'');
+    if(f.printName)row.push(r.printName||'');
+    if(f.group)row.push(r.group||'');
+    if(f.sale)row.push(fmtP(r.sale));
+    if(f.purchase)row.push(fmtP(r.purchase));
+    if(f.mrp)row.push(fmtP(r.mrp));
+    data.push(row);
+  });
+  return{headers:h,data};
+}
+function buildText(rows,f){
+  return rows.map(r=>{
+    const c=[];
+    if(f.name)c.push(r.name||'-');
+    if(f.printName)c.push(r.printName||'-');
+    if(f.group)c.push(r.group||'-');
+    if(f.sale)c.push(fmtP(r.sale));
+    if(f.purchase)c.push(fmtP(r.purchase));
+    if(f.mrp)c.push(fmtP(r.mrp));
+    return c.join(', ');
+  }).join('\n');
+}
+function copyData(){
+  const text=buildText(buildRows(),getFields());
+  const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);
+  ta.select();ta.setSelectionRange(0,99999);
+  try{document.execCommand('copy')?showNotif('✓ Copied!'):showNotif('❌ Copy failed');}catch{showNotif('❌ Copy failed');}
+  document.body.removeChild(ta);
+}
+function shareWA(){
+  const text='SR FASHION - Price List\n\n'+buildText(buildRows(),getFields());
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`,'_blank');showNotif('📱 Opening WhatsApp…');
+}
+function exportData(format){
+  const{headers,data}=buildMatrix(buildRows(),getFields());
+  if(format==='csv')exportCSV(headers,data);
+  if(format==='excel')exportExcel(headers,data);
+  if(format==='pdf')exportPDF(headers,data);
+  document.getElementById('exportModal').style.display='none';
+}
+function exportCSV(h,d){
+  let csv=h.join(',')+'\n';d.forEach(r=>{csv+=r.map(c=>`"${c}"`).join(',')+'\n';});
+  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}),link=document.createElement('a');
+  link.href=URL.createObjectURL(blob);link.download=`SR_Fashion_${new Date().toISOString().split('T')[0]}.csv`;
+  if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){const fr=new FileReader();fr.onload=e=>{window.location.href=e.target.result;};fr.readAsDataURL(blob);showNotif('📱 Check downloads');}
+  else{document.body.appendChild(link);link.click();document.body.removeChild(link);showNotif('✓ CSV downloaded!');}
+}
+function exportExcel(h,d){
+  const ws=XLSX.utils.aoa_to_sheet([h,...d]),wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'SR Fashion');
+  XLSX.writeFile(wb,`SR_Fashion_${new Date().toISOString().split('T')[0]}.xlsx`);showNotif('✓ Excel downloaded!');
+}
+function exportPDF(h,d){
+  const{jsPDF}=window.jspdf,doc=new jsPDF();
+  doc.setFontSize(18);doc.text('SR FASHION - Price List',14,15);
+  doc.setFontSize(10);doc.text(`Generated: ${new Date().toLocaleDateString()}`,14,22);
+  doc.autoTable({head:[h],body:d,startY:30,theme:'grid',styles:{fontSize:9,cellPadding:3},headStyles:{fillColor:[212,175,55],textColor:[30,30,30],fontStyle:'bold'},alternateRowStyles:{fillColor:[245,245,245]}});
+  doc.save(`SR_Fashion_${new Date().toISOString().split('T')[0]}.pdf`);showNotif('✓ PDF downloaded!');
+}
+
+function init(){
+  loadHistory();
+  document.getElementById('clearInputBtn').addEventListener('click',()=>{
+    priceInput.value='';rowData.clear();completedRows.clear();updateResults();showNotif('✕ Cleared');
+  });
+  document.getElementById('historyBtn').addEventListener('click',()=>{
+    const hs=document.getElementById('historySection');hs.style.display=hs.style.display==='block'?'none':'block';
+  });
+  document.getElementById('clearHistoryBtn').addEventListener('click',clearAllHistory);
+  document.getElementById('exportBtn').addEventListener('click',()=>{document.getElementById('exportModal').style.display='block';});
+  document.getElementById('modalClose').addEventListener('click',()=>{document.getElementById('exportModal').style.display='none';});
+  document.getElementById('exportModal').addEventListener('click',e=>{if(e.target===document.getElementById('exportModal'))document.getElementById('exportModal').style.display='none';});
+  document.getElementById('copyBtn').addEventListener('click',copyData);
+  document.getElementById('whatsappBtn').addEventListener('click',shareWA);
+  autoNumTog.addEventListener('change',updateResults);
+  gstTog.addEventListener('change',updateResults);
+  document.querySelectorAll('.col-hdr').forEach(h=>h.addEventListener('click',()=>h.parentElement.classList.toggle('open')));
+  document.querySelectorAll('.radio-opt').forEach(opt=>{
+    opt.addEventListener('click',()=>{
+      document.querySelectorAll('.radio-opt').forEach(o=>o.classList.remove('active'));
+      opt.classList.add('active');opt.querySelector('input').checked=true;updateResults();
     });
-
-    document.getElementById('result').innerHTML=html;
+  });
+  ['purchaseOpType','purchaseValue','saleOpType','saleValue','saleLink','mrpOpType','mrpValue','mrpLink'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.addEventListener('change',updateResults);el.addEventListener('input',updateResults);
+  });
+  priceInput.addEventListener('input',updateResults);
 }
-
-document.getElementById('priceInput').addEventListener('input',calc);
-document.getElementById('gstToggle').addEventListener('change',calc);
-
+init();
 </script>
-
 </body>
 </html>
